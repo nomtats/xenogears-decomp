@@ -17,9 +17,9 @@ To ensure you learn as you go, all findings must be stored in persistent memory.
 
 ### 3.1. The Decompilation Knowledge Base (DKB)
 - **Location:** `ai_workflow/knowledge_base.json` (or `.md` equivalents).
-- **Purpose:** To store specific compiler quirks, PsyQ optimizations, register allocation tricks, and structural patterns.
-- **Update Mechanism:** After every successful decompilation that required multiple attempts or novel techniques, you will synthesize the lesson learned and append it to this knowledge base.
-- **Usage:** Before attempting any new function, you must retrieve and review relevant entries from this DKB to inform your initial generation attempt.
+- **Purpose:** To store system architecture understanding, toolchain details, compiler quirks, PsyQ optimizations, register allocation tricks, and structural patterns.
+- **Update Mechanism:** You **MUST** actively update this file whenever you learn a new environmental detail (e.g., how the `Makefile` works), discover a new toolchain requirement, or successfully decompile a function using a novel technique. Do not wait for decompilation loops to update this; if you learn a fact about the repository structure, document it here immediately so future agents know it.
+- **Usage:** Before attempting any new function or running a build command, you must retrieve and review relevant entries from this DKB to inform your attempt.
 
 ### 3.2. Skill Discovery and Storage
 - **Location:** `ai_workflow/skills/` directory.
