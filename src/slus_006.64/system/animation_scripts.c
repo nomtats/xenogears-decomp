@@ -71,7 +71,9 @@ void SpriteSetSpecialAnimFile(SpriteData* pSpriteData, void* pAnimFile) {
     pSpriteData->pSpecialAnimFile = pAnimFile;
 }
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/animation_scripts", func_80021BF8);
+void func_80021BF8(SpriteData* pSpriteData, void* cb) {
+    pSpriteData->field_0x68 = cb;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/animation_scripts", func_80021C00);
 
