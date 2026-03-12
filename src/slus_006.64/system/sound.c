@@ -1452,7 +1452,9 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003D53C);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003D59C);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003D5BC);
+int func_8003D5BC(int a0) {
+    return a0 + 3;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003D5C4);
 
