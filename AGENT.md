@@ -29,7 +29,7 @@ To ensure you learn as you go, all findings must be stored in persistent memory.
 ### 3.3. The AI Decompilation Journal
 - **Location:** `ai_workflow/journals/` directory.
 - **Purpose:** To maintain a conversational and sequential history of actions, decisions, and outcomes. Because LLM context windows are limited, you cannot remember previous sessions. This journal is your logbook.
-- **Update Mechanism:** Periodically, and *especially* at the end of a long task or when shifting goals, write a new markdown entry logging what you did, what worked, what failed, and what the next logical steps are.
+- **Update Mechanism:** Periodically, and *especially* at the end of a long task or when shifting goals, write a new markdown entry logging what you did, what worked, what failed, and what the next logical steps are. Ensure filenames contain both the date and time string to keep them sorted (e.g., `YYYY-MM-DD_HHMM_subject.md`).
 - **TOC Dashboard Maintenance:** The `ai_workflow/journals/TOC.md` file acts as your "Morning Stand-up Dashboard". At the end of every session or after a major breakthrough, you **MUST**:
   1. Revise the **Current Status** section to summarize where the workflow stands.
   2. Update the **Next Immediate Steps** section so the next AI instance knows exactly where to resume work without having to read individual log files.
