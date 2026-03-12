@@ -181,6 +181,18 @@
         "data-structures"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_010",
+      "concept": "Flat Goto Block Manipulation for Branch Polarity",
+      "description": "By default, GCC compiles structured `if(cond) { block } else { block }` by emitting an inverted check `beqz` that branches over the true block to the false block. However, if the original assembly uses explicit true-branches (`bnez`, `beq`) that jump to distant memory locations and organically fall-through, you cannot match this with nested `if/else` statements. You must write flat C code that completely separates the conditional checks from the execution blocks using explicit `goto` commands mapping 1-to-1 with the original assembly structure.",
+      "tags": [
+        "optimization",
+        "control-flow",
+        "goto",
+        "mismatch"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }
