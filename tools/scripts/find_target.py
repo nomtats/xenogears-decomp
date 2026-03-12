@@ -23,7 +23,32 @@ Usage:
   python3 tools/scripts/find_target.py [--limit 20] [--path-filter "system"] [--non-leaf]
 """
 
-def analyze_asm_files(base_dirs):
+import re
+
+def build_caller_counts():
+    func_counts = {}
+    func_pattern = re.compile(r'\b(func_[A-Fa-f0-9_]+|[A-Za-z0-9_]+)\b')
+    
+    scan_dirs = ["asm", "src"]
+    for base_dir in scan_dirs:
+        if not os.path.exists(base_dir):
+            continue
+        for root, dirs, files in os.walk(base_dir):
+            for file in files:
+                if file.endswith(".s") or file.endswith(".c"):
+                    try:
+                        with open(os.path.join(root, file), "r") as f:
+                            content = f.read()
+                            # We look for strings like "jal func_800..." or "jal SpriteSet" etc
+                            # But a simpler heuristic is just counting the name occurrences.
+                            matches = func_pattern.findall(content)
+                            for match in matches:
+                                func_counts[match] = func_counts.get(match, 0) + 1
+                    except Exception:
+                        pass
+    return func_counts
+
+def analyze_asm_files(base_dirs, ref_counts):
     targets = []
     
     for base_dir in base_dirs:
@@ -34,6 +59,7 @@ def analyze_asm_files(base_dirs):
             for file in files:
                 if file.endswith(".s"):
                     filepath = os.path.join(root, file)
+                    func_name = file.replace(".s", "")
                     
                     try:
                         with open(filepath, "r") as f:
@@ -54,10 +80,17 @@ def analyze_asm_files(base_dirs):
                             is_leaf = False
                             break
                     
+                    # Subtract some references like definition glabel, .size, and INCLUDE_ASM itself
+                    # Usually around 3 definition occurrences. Bounding to >= 0
+                    raw_count = ref_counts.get(func_name, 0)
+                    callers = max(0, raw_count - 3)
+                    
                     targets.append({
                         "path": filepath,
+                        "name": func_name,
                         "size_lines": size,
-                        "is_leaf": is_leaf
+                        "is_leaf": is_leaf,
+                        "callers": callers
                     })
                     
     return targets
@@ -67,6 +100,7 @@ def main():
     parser.add_argument("--limit", type=int, default=20, help="Number of targets to show")
     parser.add_argument("--path-filter", type=str, default="", help="Filter targets by path substring (e.g., 'system')")
     parser.add_argument("--non-leaf", action="store_true", help="Include non-leaf functions in top results")
+    parser.add_argument("--sort-callers", action="store_true", help="Sort strictly by caller count (descending) instead of size")
     args = parser.parse_args()
 
     # We want to look inside the nonmatchings folders for both the main executable and field overlays
@@ -75,8 +109,11 @@ def main():
         "asm/field/nonmatchings"
     ]
     
+    print(f"Scanning the codebase for function references (this may take a few seconds)...")
+    ref_counts = build_caller_counts()
+    
     print(f"Scanning target directories...")
-    targets = analyze_asm_files(search_dirs)
+    targets = analyze_asm_files(search_dirs, ref_counts)
     
     if args.path_filter:
         targets = [t for t in targets if args.path_filter in t["path"]]
@@ -84,23 +121,22 @@ def main():
     print(f"Found {len(targets)} un-matched functions total.\n")
     
     # Sorting Strategy:
-    # 1. By default, Leaf functions are prioritized because they are self-contained and don't require knowing external function addresses/signatures.
-    # 2. Then, sort by size (smallest first). We want simple functions to test the workflow.
-    
-    if not args.non_leaf:
-        # Filter to only show leaf functions, or prioritize them heavily
-        primary_sort = lambda x: (not x["is_leaf"], x["size_lines"])
+    if args.sort_callers:
+        primary_sort = lambda x: (-x["callers"], x["size_lines"])
+    elif not args.non_leaf:
+        # Prioritize leaves, then callers (descending), then size
+        primary_sort = lambda x: (not x["is_leaf"], -x["callers"], x["size_lines"])
     else:
-        primary_sort = lambda x: x["size_lines"]
+        primary_sort = lambda x: (-x["callers"], x["size_lines"])
         
     targets.sort(key=primary_sort)
 
     print(f"Top {args.limit} suggested targets:")
-    print(f"{'Path':<70} | {'Lines':<6} | {'Type'}")
-    print("-" * 90)
+    print(f"{'Path':<70} | {'Lines':<5} | {'Refs':<4} | {'Type'}")
+    print("-" * 94)
     for t in targets[:args.limit]:
         func_type = "Leaf" if t["is_leaf"] else "Non-Leaf"
-        print(f"{t['path']:<70} | {t['size_lines']:<6} | {func_type}")
+        print(f"{t['path']:<70} | {t['size_lines']:<5} | {t['callers']:<4} | {func_type}")
 
 if __name__ == "__main__":
     main()
