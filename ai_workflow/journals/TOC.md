@@ -16,7 +16,12 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Run `make build` inside the container to compile the codebase securely using PsyQ GCC and `maspsx`.
 - [x] Run `make report` / `make check` to verify the baseline build perfectly matches the original disc bytes using `objdiff`.
 
-### Phase 3: Autonomous Orchestration (Upcoming)
+### Phase 3: Manual Decompilation & Strategy (Current)
+- [ ] Analyze `build/progress.json` to map decompilation targets.
+- [ ] Attempt manual decompilation of small functions (e.g., in `system/` or `psyq/`) to familiarize oneself with PsyQ optimizations and compiler quirks.
+- [ ] Update header files (`types.h`, `common.h`) to establish data structures.
+
+### Phase 4: Autonomous Orchestration (Upcoming)
 - [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator.
 - [ ] Implement the continuous compilation feedback loop (Pick un-matched `.s` -> Prompt AI for `.c` -> Compile -> Evaluate Diff/Fix -> Repeat).
 - [ ] Plumb the feedback loop to automatically log successful compiler tricks and heuristics back into `knowledge_base.json`.
