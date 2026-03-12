@@ -54,6 +54,18 @@
         "scripts"
       ],
       "date_added": "2026-03-12"
+    },
+    {
+      "id": "build_gotcha_001",
+      "concept": "Submodules & Checksum Verification Issues",
+      "description": "If `maspsx.py` is mysteriously missing before or during `make build`, it means the repository submodules were not initialized properly. Run `git submodule update --init --recursive`. If `make check` fails with 'no file was verified', check the line endings of `config/checksum.sha`. It must be converted to Unix style via `dos2unix` for standard Linux `sha256sum` to parse it correctly.",
+      "tags": [
+        "build",
+        "error",
+        "submodule",
+        "crlf"
+      ],
+      "date_added": "2026-03-12"
     }
   ],
   "patterns": [
