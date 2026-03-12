@@ -42,6 +42,18 @@
         "lzss"
       ],
       "date_added": "2026-03-12"
+    },
+    {
+      "id": "toolchain_003_repo_scripts",
+      "concept": "Available Repository Tools",
+      "description": "Always consult `tools/` before writing external scripts. Available utilities: `maspsx/` (translates PsyQ assembly to GNU MIPS), `objdiff/` (binary diffing), `gcc-*/` (various PS1 compilers), `tools/scripts/ghidra_import_splat_symbols.py` (for Ghidra ROM labeling), `tools/scripts/get_yaml_target.py` (splat config parser), and `tools/scripts/ci_extract_assets.sh` (1-click LZSS disk extraction wrapper).",
+      "tags": [
+        "tools",
+        "maspsx",
+        "ghidra",
+        "scripts"
+      ],
+      "date_added": "2026-03-12"
     }
   ],
   "patterns": [
