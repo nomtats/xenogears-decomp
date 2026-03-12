@@ -55,7 +55,7 @@ extern u32 g_ArchiveDebugTable;
 extern u32 g_ArchiveHeader;
 extern u32 g_ArchiveTable;
 extern u32 g_CurArchiveOffset;
-extern int D_8004FE18;
+extern int g_ArchiveSavedOffset;
 extern unsigned int g_ArchiveCdDriveState;
 extern unsigned int g_ArchiveCdDriveError;
 extern void* g_ArchiveCurStreamFile;

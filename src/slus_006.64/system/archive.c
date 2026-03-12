@@ -27,7 +27,7 @@ extern void func_8002BA58();
 extern s32 g_ArchiveCurFileSector;
 
 // Only matches on GCC 2.7.2
-int ArchiveReadFile(u32 dbgEntryIndex, u8* pDestBuffer, s32 arg2, s32 arg3) {
+int ArchiveReadFile(u32 dbgEntryIndex, u8* pDestBuffer, s32 audioChannel, s32 readModeFlags) {
     void* pReadyCallback;
     int nStreamSectors;
     int nStreamSectors2; // The same as nStreamSectors, doesn't match unless it's two variables
@@ -45,7 +45,7 @@ int ArchiveReadFile(u32 dbgEntryIndex, u8* pDestBuffer, s32 arg2, s32 arg3) {
     
     D_8004FDFC = 1;
     D_8004FE08 = pDestBuffer;
-    D_8004FE38 = arg2 & 0xFFFF;
+    D_8004FE38 = audioChannel & 0xFFFF;
     D_8004FE10 = 0;
     D_8004FE0C = 0;
     D_8004FE34 = 0;
@@ -53,7 +53,7 @@ int ArchiveReadFile(u32 dbgEntryIndex, u8* pDestBuffer, s32 arg2, s32 arg3) {
     pLoc = &g_ArchiveCdCurLocation;
     CdIntToPos(g_ArchiveCurFileSector, pLoc);
     
-    if (arg3 & 0x100) {
+    if (readModeFlags & 0x100) {
         ArchiveChangeStreamingFile(pDestBuffer);
         nStreamSectors = *(u32*)g_ArchiveCurStreamFile;
         if (nStreamSectors) {
@@ -91,7 +91,7 @@ int ArchiveReadFile(u32 dbgEntryIndex, u8* pDestBuffer, s32 arg2, s32 arg3) {
         return -4;
     }
     
-    if (arg3 & 0x200) {
+    if (readModeFlags & 0x200) {
         ArchiveChangeStreamingFile(pDestBuffer);
         nStreamSectors2 = *(u32*)g_ArchiveCurStreamFile;
         if (nStreamSectors2) {
@@ -109,7 +109,7 @@ int ArchiveReadFile(u32 dbgEntryIndex, u8* pDestBuffer, s32 arg2, s32 arg3) {
                 *pCdMode-- = 0;
 
             // CD Mode - double speed, 2340 byte size
-            D_80059F18[0] = arg3 | CdlModeSpeed | CdlModeSize1;
+            D_80059F18[0] = readModeFlags | CdlModeSpeed | CdlModeSize1;
             
             if (g_ArchiveDebugTable) {
                 pFilePath2 = ArchiveGetFilePath(dbgEntryIndex);
@@ -201,7 +201,7 @@ void ArchiveCdSeekOrPause(int entryIndex) {
     CdlLOC* pCdLocation;
 
     if ((g_ArchiveDebugTable == 0) && (ArchiveDataSync() == 0)) {
-        D_8004FE18 = g_CurArchiveOffset;
+        g_ArchiveSavedOffset = g_CurArchiveOffset;
         if (entryIndex > 0) {
             pCdLocation = &g_ArchiveCdCurLocation;
             nSector = ArchiveDecodeSector(entryIndex);

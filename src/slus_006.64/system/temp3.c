@@ -264,7 +264,7 @@ void func_8001B53C(int index) {
     D_8005A4C0 = ArchiveDecodeAlignedSize(index + 0xB8);
     D_8005A4E0 = HeapAlloc(D_8005A4C0, 1);
     HeapPinBlock(D_8005A4E0);
-    func_800295D8(index + 0xB8, D_8005A4E0, 0, 0x80);
+    ArchiveRead(index + 0xB8, D_8005A4E0, 0, 0x80);
 }
 
 extern int g_GameHasLoadedWDS;

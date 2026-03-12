@@ -226,7 +226,7 @@ int ArchiveDecodeSize(int entryIndex) {
     return nFileSize;
 }
 
-// Uses D_8004FE18 as archive offset
+// Uses g_ArchiveSavedOffset as archive offset
 int ArchiveDecodeSizeAligned(int entryIndex) {
     char* pFilepath;
     int hArchiveFile;
@@ -244,7 +244,7 @@ int ArchiveDecodeSizeAligned(int entryIndex) {
         }
     }
     
-    nOffset = (entryIndex + D_8004FE18 - 1) * ARCHIVE_HEADER_ENTRY_SIZE;
+    nOffset = (entryIndex + g_ArchiveSavedOffset - 1) * ARCHIVE_HEADER_ENTRY_SIZE;
     pArchiveEntry = nOffset + g_ArchiveTable;
     nFileSize = (
         (pArchiveEntry[6] << 0x18) + 
@@ -310,12 +310,12 @@ int ArchiveDecodeSector(int entryIndex) {
     return (pArchiveEntry[2] << 0x10) + (pArchiveEntry[1] << 0x8) + pArchiveEntry[0];
 }
 
-// Same as ArchiveDecodeSector, but uses D_8004FE18 as current archive offset
+// Same as ArchiveDecodeSector, but uses g_ArchiveSavedOffset as current archive offset
 int func_80028A18(int entryIndex) {
     u_char* pArchiveEntry;
     unsigned int nOffset;
 
-    nOffset = (entryIndex + D_8004FE18 - 1) * ARCHIVE_HEADER_ENTRY_SIZE;
+    nOffset = (entryIndex + g_ArchiveSavedOffset - 1) * ARCHIVE_HEADER_ENTRY_SIZE;
     pArchiveEntry = nOffset + g_ArchiveTable;
     return (pArchiveEntry[2] << 0x10) + (pArchiveEntry[1] << 0x8) + pArchiveEntry[0];
 }
@@ -397,15 +397,23 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_80028F30);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_8002945C);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_800294B4);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_8002954C);
-int func_800295D8(int entryIndex, void *pBuffer, int param3, int param4) {
+/**
+ * Reads data from an archive on the disc into memory.
+ * 
+ * @param entryIndex The index of the file within the archive.
+ * @param pBuffer    The destination pointer in RAM where the file should be loaded.
+ * @param audioChannel Which audio channel to play if this is a streaming audio read.
+ * @param readModeFlags  CD read mode modifiers (e.g. CdlModeSpeed).
+ */
+int ArchiveRead(int entryIndex, void *pBuffer, int audioChannel, int readModeFlags) {
     if ((entryIndex <= 0) || (ArchiveDecodeSize(entryIndex) <= 0) || (pBuffer == NULL)) {
         return -3;
     }
 
     ArchiveCdDataSync(0);
-    D_8004FE18 = g_CurArchiveOffset;
+    g_ArchiveSavedOffset = g_CurArchiveOffset;
     g_ArchiveCurFileSector = ArchiveDecodeSector(entryIndex);
     g_ArchiveCurFileSize = ArchiveDecodeAlignedSize(entryIndex);
 
-    return ArchiveReadFile(entryIndex, pBuffer, param3, param4);
+    return ArchiveReadFile(entryIndex, pBuffer, audioChannel, readModeFlags);
 }

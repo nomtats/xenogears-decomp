@@ -98,6 +98,8 @@ ArchiveCdSeekToFile = 0x8002A394;
 ArchiveCdSetMode = 0x8002A428;
 ArchiveStreamFreeQueueData = 0x8002A524;
 ArchiveCdDriveCommandHandler = 0x8002A68C;
+ArchiveRead = 0x800295D8;
+g_ArchiveSavedOffset = 0x8004FE18;
 
 // Heap / Dynamic Memory
 HeapGetNextBlockHeader = 0x80031894;

@@ -798,7 +798,7 @@ void func_80085FB8(void) {
     ArchiveSetIndex(0x1C, 0x0);
     pWdsFileBuffer = HeapAlloc(ArchiveDecodeAlignedSize(3), 1);
     D_800B00E0 = pWdsFileBuffer;
-    func_800295D8(3, pWdsFileBuffer, 0, 0x80);
+    ArchiveRead(3, pWdsFileBuffer, 0, 0x80);
     ArchiveSetIndex(4, 0);
     D_8004F364 = 0x80;
 }

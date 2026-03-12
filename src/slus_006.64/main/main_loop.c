@@ -14,7 +14,7 @@ extern void* g_CurGameStateOverlayBuffer;
 extern void* LZSSHeapDecompress(void*, int flags); 
 extern u8 g_PublishedByLogoCompressed[];
 
-extern void func_800295D8(s32, void*, u32, u32);
+extern void ArchiveRead(s32, void*, u32, u32);
 
 extern s32 D_80010000;
 extern s8 D_800181B8;
@@ -65,7 +65,7 @@ void* LoadGameStateOverlay(unsigned int overlayIndex) {
         g_CurGameStateOverlayBuffer = pBuffer;
         if (pBuffer != NULL) {
             // Read archive file into buffer
-            func_800295D8(g_GameStateOverlayArchiveOffsets[overlayIndex], pBuffer, 0, 0);
+            ArchiveRead(g_GameStateOverlayArchiveOffsets[overlayIndex], pBuffer, 0, 0);
         } else {
             g_CurGameStateOverlayID = -1;
         }
