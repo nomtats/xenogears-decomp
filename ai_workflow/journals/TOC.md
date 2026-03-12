@@ -5,10 +5,21 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 ## 🟢 Current Status
 - **Bootstrapping Phase.** All required assets (`SLUS_006.64`, `MOVIE.BIN`, `FIELD.BIN`, etc.) have been successfully successfully extracted from the raw PS1 disk image. The Dockerized build environment is online and verified. The AI has learned core directives about seeking existing tools and avoiding unnecessary brute force.
 
-## 🔜 Next Immediate Steps
-1. Run `make setup` / `make generate` within the Docker container to execute `splat` and carve the extracted assets into `src/` and `asm/` directories.
-2. Verify the project builds successfully by running `make build` within the container.
-3. Begin drafting the `auto_decomp.py` orchestration loop to automate the decompilation verification cycle.
+## 📋 Project Roadmap & Next Steps
+### Phase 1: Environment Setup (Completed)
+- [x] Establish meta-workflow and AI directives
+- [x] Configure Docker build environment
+- [x] Extract raw PS1 assets (`SLUS_006.64`, `FIELD.BIN`, etc.) using newly discovered tools
+
+### Phase 2: Repository Bootstrapping (Next)
+- [ ] Run `make setup` inside the container to use `splat` to carve the extracted binaries into `src/` (C) and `asm/` (assembly).
+- [ ] Run `make build` inside the container to compile the codebase securely using PsyQ GCC and `maspsx`.
+- [ ] Run `make report` / `make check` to verify the baseline build perfectly matches the original disc bytes using `objdiff`.
+
+### Phase 3: Autonomous Orchestration (Upcoming)
+- [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator.
+- [ ] Implement the continuous compilation feedback loop (Pick un-matched `.s` -> Prompt AI for `.c` -> Compile -> Evaluate Diff/Fix -> Repeat).
+- [ ] Plumb the feedback loop to automatically log successful compiler tricks and heuristics back into `knowledge_base.json`.
 
 ## 📖 Detailed Log Entries
 
