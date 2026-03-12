@@ -397,4 +397,15 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_80028F30);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_8002945C);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_800294B4);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_8002954C);
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/libarchive", func_800295D8);
+int func_800295D8(int entryIndex, void *pBuffer, int param3, int param4) {
+    if ((entryIndex <= 0) || (ArchiveDecodeSize(entryIndex) <= 0) || (pBuffer == NULL)) {
+        return -3;
+    }
+
+    ArchiveCdDataSync(0);
+    D_8004FE18 = g_CurArchiveOffset;
+    g_ArchiveCurFileSector = ArchiveDecodeSector(entryIndex);
+    g_ArchiveCurFileSize = ArchiveDecodeAlignedSize(entryIndex);
+
+    return ArchiveReadFile(entryIndex, pBuffer, param3, param4);
+}

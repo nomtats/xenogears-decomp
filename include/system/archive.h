@@ -60,6 +60,7 @@ extern unsigned int g_ArchiveCdDriveState;
 extern unsigned int g_ArchiveCdDriveError;
 extern void* g_ArchiveCurStreamFile;
 extern CdlLOC g_ArchiveCdCurLocation;
+extern int g_ArchiveCurFileSector;
 extern int g_ArchiveCurFileSize;
 
 extern s32 D_8004FDFC;
