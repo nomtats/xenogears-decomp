@@ -101,6 +101,12 @@ ArchiveCdDriveCommandHandler = 0x8002A68C;
 ArchiveRead = 0x800295D8;
 g_ArchiveSavedOffset = 0x8004FE18;
 
+SoundWaitSpuTransfer = 0x8003BDFC;
+SoundPlayDefaultSeds = 0x80039E60;
+g_SoundDefaultWdsData = 0x80050940;
+g_SoundDefaultSedsData = 0x80050910;
+g_SoundDefaultSedsVoices = 0x80050924;
+
 // Heap / Dynamic Memory
 HeapGetNextBlockHeader = 0x80031894;
 HeapGetBlockUser = 0x800318A8;

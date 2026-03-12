@@ -942,7 +942,22 @@ void func_80039E18(s32 arg0) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_80039E60);
+extern s32 func_8003A65C(s32 a0, s16 a1);
+extern void func_8003B644(s16 a0, s32 a1, s32 a2, s32 a3);
+
+/**
+ * @brief Triggers a recovery mechanism for Sound Effect Data Sequence playback 
+ * 
+ * If the 0x800 system flag is enabled, it manually triggers an execution
+ * parameter retrieval and schedules a hardcoded SEDS instruction playback fallback.
+ */
+void SoundPlayDefaultSeds(u32 voiceConfigFlags) {
+    if (g_SoundControlFlags & 0x800) {
+        s16 voiceBaseParam = func_8003A65C(voiceConfigFlags, 2);
+        D_80059404 = 2;
+        func_8003B644(voiceBaseParam | 0x2000, voiceConfigFlags, 0x6000, 0x4000);
+    }
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 void func_80039EC4(s32 arg0, s32 arg1) {
@@ -1284,7 +1299,7 @@ int SoundTransferQueueSync() {
 
 void func_8003BDF4(void) {}
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003BDFC);
+INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", SoundWaitSpuTransfer);
 //----------------------------------------------------------------------------------------------------------------------
 void SoundProcessTransferCommand(void) {
     SpuTransferCallbackProc pPrevCallback;
@@ -1905,9 +1920,9 @@ void SoundHandleError(s32 errorId) {
         g_SoundControlFlags |= 8;
         g_SoundSpuErrorId = errorId;
         SoundSpuMemoryFreeBlock(0x10000);
-        SoundLoadWdsFile(D_80050940, 0);
-        SoundAddSedsEntry(&D_80050910);
-        func_8003BDFC(0x10);
-        func_80039E60((D_80050924[0] << 16) | 1);
+        SoundLoadWdsFile(g_SoundDefaultWdsData, 0);
+        SoundAddSedsEntry(&g_SoundDefaultSedsData);
+        SoundWaitSpuTransfer(0x10);
+        SoundPlayDefaultSeds((g_SoundDefaultSedsVoices[0] << 16) | 1);
     }
 }

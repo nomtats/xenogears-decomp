@@ -244,11 +244,11 @@ extern s32 SoundCalculateAudioManagerSize(s32 elementCount);
 extern void SoundSetVolumeWithPhase(s32, SpuVolume*, s32);
 
 extern void* SoundLoadWdsFile(void*, int);
-extern int func_8003BDFC(u32);
-extern void func_80039E60(u32);
+extern int SoundWaitSpuTransfer(u32);
+extern void SoundPlayDefaultSeds(u32);
 
-extern u32 D_80050940[];
-extern SoundFile D_80050910;
-extern u16 D_80050924[];
+extern u32 g_SoundDefaultWdsData[];
+extern SoundFile g_SoundDefaultSedsData;
+extern u16 g_SoundDefaultSedsVoices[];
 
 #endif
