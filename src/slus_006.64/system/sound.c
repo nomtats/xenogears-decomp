@@ -277,23 +277,61 @@ void func_80037F88(void) {
 
 
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", SoundLoadWdsFile);
+SoundWDSEntry* SoundLoadWdsFile(SoundWDSEntry* pWdsFile, int mode) {
+    int spuAddress;
+    SoundWDSEntry* newEntry;
+    SoundWDSEntry** pCurrent;
+
+    spuAddress = SoundSpuMemoryAllocateWDS(pWdsFile, mode);
+    
+    if (spuAddress == 0) {
+        SoundHandleError(0x1F);
+        return NULL;
+    }
+
+    SoundQueueSpuWriteCommand(spuAddress, (void*)((u8*)pWdsFile + pWdsFile->adpcmDataOffset), pWdsFile->adpcmDataSize, NULL);
+
+    newEntry = func_80039024(pWdsFile->headerSizeMby);
+    if (newEntry == NULL) {
+        SoundSpuMemoryFreeBlock(spuAddress);
+        SoundHandleError(0x1E);
+        return NULL;
+    }
+
+    SoundHeapSetBlockMemory(newEntry, pWdsFile, pWdsFile->headerSizeMby);
+
+    newEntry->spuMemoryAddress = spuAddress;
+    DisableEvent(g_unk_SoundEvent);
+
+    pCurrent = &g_SoundWdsLinkedList;
+    if (g_SoundWdsLinkedList != NULL) {
+        do {
+            SoundWDSEntry* pIter = *pCurrent;
+            pCurrent = &pIter->pNext;
+        } while (*pCurrent != NULL);
+    }
+    *pCurrent = newEntry;
+
+    newEntry->pNext = NULL;
+    EnableEvent(g_unk_SoundEvent);
+
+    return newEntry;
+}
 // Loads part of a WDS file, basically a sized SoundLoadWdsFile?
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_800380D0);
 
-void SoundSpuMemoryAllocateWDS(SoundWDSEntry* pWdsFile, int mode) {
+int SoundSpuMemoryAllocateWDS(SoundWDSEntry* pWdsFile, int mode) {
     if (mode == SOUND_WDS_ALLOCATE_AT_ADDRESS) {
         mode = pWdsFile->spuMemoryAddress;
     } else if (mode == SOUND_WDS_ALLOCATE_AUTOMATIC) {
         mode = 0;
     }
     
-    if (mode == 0) {
-        SoundSpuMemoryAllocateBlock(pWdsFile->adpcmDataSize, pWdsFile->unk1E);
-        return;
+    if (mode != 0) {
+        return SoundSpuMemoryAllocateBlockAtAddress(pWdsFile->adpcmDataSize, pWdsFile->spuMemoryAddress, pWdsFile->unk1E);
     }
     
-    SoundSpuMemoryAllocateBlockAtAddress(pWdsFile->adpcmDataSize, pWdsFile->spuMemoryAddress, pWdsFile->unk1E);
+    return SoundSpuMemoryAllocateBlock(pWdsFile->adpcmDataSize, pWdsFile->unk1E);
 }
 
 void SoundWdsSetTransferParamters(int transferAddress, int numBytesToTransfer) {

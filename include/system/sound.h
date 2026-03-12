@@ -253,7 +253,7 @@ extern CdlATV g_SoundCdRomAttenuation;
 extern s32 SoundCalculateAudioManagerSize(s32 elementCount);
 extern void SoundSetVolumeWithPhase(s32, SpuVolume*, s32);
 
-extern void SoundSpuMemoryAllocateWDS(SoundWDSEntry* pWdsFile, int mode);
+extern int SoundSpuMemoryAllocateWDS(SoundWDSEntry* pWdsFile, int mode);
 extern SoundWDSEntry* func_80039024(u32 size);
 extern void SoundQueueSpuWriteCommand(u32 transferAddress, void* pData, u_long dataSize, SoundCommandCallback_t pCallback);
 extern int SoundSpuMemoryFreeBlock(int targetAddress);
