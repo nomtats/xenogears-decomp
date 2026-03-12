@@ -99,6 +99,7 @@ def main():
     parser = argparse.ArgumentParser(description="Find good decompilation targets")
     parser.add_argument("--limit", type=int, default=20, help="Number of targets to show")
     parser.add_argument("--path-filter", type=str, default="", help="Filter targets by path substring (e.g., 'system')")
+    parser.add_argument("--exclude-filter", type=str, default="psyq", help="Exclude targets by path substring (default: 'psyq')")
     parser.add_argument("--non-leaf", action="store_true", help="Include non-leaf functions in top results")
     parser.add_argument("--sort-callers", action="store_true", help="Sort strictly by caller count (descending) instead of size")
     args = parser.parse_args()
@@ -117,6 +118,9 @@ def main():
     
     if args.path_filter:
         targets = [t for t in targets if args.path_filter in t["path"]]
+    if args.exclude_filter:
+        targets = [t for t in targets if args.exclude_filter not in t["path"]]
+        
         
     print(f"Found {len(targets)} un-matched functions total.\n")
     
