@@ -3,7 +3,7 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Bootstrapping Phase.** All required assets (`SLUS_006.64`, `MOVIE.BIN`, `FIELD.BIN`, etc.) have been successfully successfully extracted from the raw PS1 disk image. The Dockerized build environment is online and verified. The AI has learned core directives about seeking existing tools and avoiding unnecessary brute force.
+- **Bootstrapping Complete. Orchestration Next.** All original assets have been carved by `splat`, standard builds compile successfully via PsyQ tools/maspsx, and verification passes perfectly against the original binaries. We are now pivoting to the creation of the continuous AI evaluation loop (`auto_decomp.py`).
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -29,4 +29,5 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-12 | System Requirements Analysis | Analyzed `Makefile` and CI dependencies. Identified requirement for Docker and original PS1 binaries. | [2026-03-12_1741_system_analysis.md](./2026-03-12_1741_system_analysis.md) |
 | 2026-03-12 | Asset Extraction & Meta-Learnings | Extracted PS1 disc using repository python scripts. Adopted new 'Pause When Struggling' directive. | [2026-03-12_1820_asset_extraction_learnings.md](./2026-03-12_1820_asset_extraction_learnings.md) |
 | 2026-03-12 | Repository Tools Survey | Executed the Extract Tools First directive. Cataloged all scripts and utilities in `tools/`. | [2026-03-12_1848_tools_survey.md](./2026-03-12_1848_tools_survey.md) |
+| 2026-03-12 | Repository Bootstrapping | Successfully carved assets, resolved submodule build issues, and generated `objdiff` hashes. | [2026-03-12_2251_bootstrapping_success.md](./2026-03-12_2251_bootstrapping_success.md) |
 
