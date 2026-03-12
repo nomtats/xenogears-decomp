@@ -103,6 +103,7 @@ g_ArchiveSavedOffset = 0x8004FE18;
 
 SoundWaitSpuTransfer = 0x8003BDFC;
 SoundElementInit = 0x8003E3E0;
+SoundCalculateEnvelopeStep = 0x8003E290;
 SoundPlayDefaultSeds = 0x80039E60;
 g_SoundDefaultWdsData = 0x80050940;
 g_SoundDefaultSedsData = 0x80050910;

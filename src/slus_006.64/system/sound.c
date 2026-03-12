@@ -1614,7 +1614,40 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E180);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E1F8);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E290);
+/**
+ * @brief Calculates the step delta for an ADSR envelope or pitch slide.
+ * 
+ * Takes a base value, a divisor/multiplier, and an envelope mode curve.
+ * 
+ * Note on matching: To compel GCC 2.7.2 to emit `bnez` branches pointing explicitly
+ * at remote blocks rather than falling through to inverted `beqz` checks, this function
+ * is constructed using flat `goto` control flow blocks mimicking the assembly footprint exactly.
+ *
+ * @param targetDelta The target delta value or initial pitch
+ * @param envelopeBase The envelope modifier or divisor
+ * @param envelopeMode The curve mode (e.g. 0-1 linear, 2-3 exponential, 4 split)
+ * @return int The calculated scaled pitch or volume step
+ */
+int SoundCalculateEnvelopeStep(int targetDelta, short envelopeBase, short envelopeMode) {
+    if (targetDelta == 0) goto end;
+    if (envelopeBase == 0) goto end;
+
+    if (envelopeMode < 2) goto end;
+    if (envelopeMode < 4) goto block_div;
+    if (envelopeMode == 4) goto block_div_minus_1;
+    goto end;
+
+block_div:
+    targetDelta = targetDelta / envelopeBase;
+    goto end;
+
+block_div_minus_1:
+    if (envelopeBase == 1) goto end;
+    targetDelta = targetDelta / (envelopeBase - 1);
+
+end:
+    return targetDelta;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E308);
 
