@@ -11,10 +11,10 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Configure Docker build environment
 - [x] Extract raw PS1 assets (`SLUS_006.64`, `FIELD.BIN`, etc.) using newly discovered tools
 
-### Phase 2: Repository Bootstrapping (Next)
-- [ ] Run `make setup` inside the container to use `splat` to carve the extracted binaries into `src/` (C) and `asm/` (assembly).
-- [ ] Run `make build` inside the container to compile the codebase securely using PsyQ GCC and `maspsx`.
-- [ ] Run `make report` / `make check` to verify the baseline build perfectly matches the original disc bytes using `objdiff`.
+### Phase 2: Repository Bootstrapping (Completed)
+- [x] Run `make setup` inside the container to use `splat` to carve the extracted binaries into `src/` (C) and `asm/` (assembly).
+- [x] Run `make build` inside the container to compile the codebase securely using PsyQ GCC and `maspsx`.
+- [x] Run `make report` / `make check` to verify the baseline build perfectly matches the original disc bytes using `objdiff`.
 
 ### Phase 3: Autonomous Orchestration (Upcoming)
 - [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator.
