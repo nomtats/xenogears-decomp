@@ -101,6 +101,17 @@
         "incremental"
       ],
       "date_added": "2026-03-12"
+    },
+    {
+      "id": "pattern_example_003",
+      "concept": "Forced Register Allocation via GCC 'asm' Extensions",
+      "description": "If your C code logic matches the assembly perfectly, but GCC chooses different temporary arithmetic registers (e.g., you need `$a2` and `$v0`, but GCC uses `$a0` and `$v0`), you can force the compiler's hand using GCC Local Register Variables: `register int a2 asm(\"a2\") = expression;`. This is an extremely powerful technique to achieve byte-for-byte matching on mathematically simple functions that otherwise fail the `objdiff` hash due to arbitrary register assignment.",
+      "tags": [
+        "optimization",
+        "compiler-flags",
+        "register-allocation"
+      ],
+      "date_added": "2026-03-12"
     }
   ]
 }
