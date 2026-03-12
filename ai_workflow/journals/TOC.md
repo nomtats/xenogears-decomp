@@ -3,7 +3,7 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Bootstrapping Complete. Orchestration Next.** All original assets have been carved by `splat`, standard builds compile successfully via PsyQ tools/maspsx, and verification passes perfectly against the original binaries. We are now pivoting to the creation of the continuous AI evaluation loop (`auto_decomp.py`).
+- **Manual Decompilation Validated.** I have successfully manually decompiled `func_80021FB8` (a 4-line `sb` leaf function), compiled it via `make clean-build`, and verified it matches the original game byte-for-byte using `objdiff`. The repository's matched function count has officially increased. The entire workflow is proven sound and ready to be orchestrated.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -16,12 +16,12 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Run `make build` inside the container to compile the codebase securely using PsyQ GCC and `maspsx`.
 - [x] Run `make report` / `make check` to verify the baseline build perfectly matches the original disc bytes using `objdiff`.
 
-### Phase 3: Manual Decompilation & Strategy (Current)
-- [ ] Analyze `build/progress.json` to map decompilation targets.
-- [ ] Attempt manual decompilation of small functions (e.g., in `system/` or `psyq/`) to familiarize oneself with PsyQ optimizations and compiler quirks.
-- [ ] Update header files (`types.h`, `common.h`) to establish data structures.
+### Phase 3: Manual Decompilation & Strategy (Completed)
+- [x] Analyze `build/progress.json` to map decompilation targets.
+- [x] Attempt manual decompilation of small functions (e.g., in `system/` or `psyq/`) to familiarize oneself with PsyQ optimizations and compiler quirks.
+- [x] Update header files (`types.h`, `common.h`) to establish data structures.
 
-### Phase 4: Autonomous Orchestration (Upcoming)
+### Phase 4: Autonomous Orchestration (Next)
 - [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator.
 - [ ] Implement the continuous compilation feedback loop (Pick un-matched `.s` -> Prompt AI for `.c` -> Compile -> Evaluate Diff/Fix -> Repeat).
 - [ ] Plumb the feedback loop to automatically log successful compiler tricks and heuristics back into `knowledge_base.json`.
@@ -35,4 +35,5 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-12 | Asset Extraction & Meta-Learnings | Extracted PS1 disc using repository python scripts. Adopted new 'Pause When Struggling' directive. | [2026-03-12_1820_asset_extraction_learnings.md](./2026-03-12_1820_asset_extraction_learnings.md) |
 | 2026-03-12 | Repository Tools Survey | Executed the Extract Tools First directive. Cataloged all scripts and utilities in `tools/`. | [2026-03-12_1848_tools_survey.md](./2026-03-12_1848_tools_survey.md) |
 | 2026-03-12 | Repository Bootstrapping | Successfully carved assets, resolved submodule build issues, and generated `objdiff` hashes. | [2026-03-12_2251_bootstrapping_success.md](./2026-03-12_2251_bootstrapping_success.md) |
+| 2026-03-12 | Manual Decompilation Execution | Replaced `INCLUDE_ASM` for `func_80021FB8.s` using `u8*` casting to target `sb` offset. Validated build. | [2026-03-12_2319_first_manual_decomp.md](./2026-03-12_2319_first_manual_decomp.md) |
 

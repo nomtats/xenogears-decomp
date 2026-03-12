@@ -78,6 +78,17 @@
         "register-allocation"
       ],
       "date_added": "2026-03-12"
+    },
+    {
+      "id": "pattern_example_002",
+      "concept": "Store Byte (sb) via Pointer Casting",
+      "description": "If MIPS assembly contains isolated `sb` (store byte) or `lb` (load byte) instructions against a defined struct pointer (e.g., `sb $a1, 0xB0($a0)`), but the struct definition at that offset hasn't been fully mapped to a bitfield yet, you can reliably generate perfectly matching code by casting the pointer to a byte array and accessing the index directly: `((u8*)ptr)[0xB0] = val;`",
+      "tags": [
+        "optimization",
+        "casting",
+        "pointers"
+      ],
+      "date_added": "2026-03-12"
     }
   ]
 }
