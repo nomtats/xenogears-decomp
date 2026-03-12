@@ -148,6 +148,39 @@
         "encapsulation"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_007",
+      "concept": "GCC 2.6.0 Delay Slot Hoisting",
+      "description": "GCC 2.6.0 will happily lift memory assignments (e.g. `newEntry->pNext = NULL;`) into the delay slots of subsequent function calls (e.g. `EnableEvent()`). If a decompiled function logically matches but order is slightly 'off' resulting in mismatched delay slots, try placing the assignments directly *before* the function call to see if the compiler hoists them natively into the delay slot.",
+      "tags": [
+        "optimization",
+        "delay-slots",
+        "mismatch"
+      ],
+      "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_008",
+      "concept": "PsyQ Linked List Traversal Matching",
+      "description": "A standard modern `while(curr->next)` loop evaluates differently in PsyQ. To match original PS1 linked list traversals exactly, you frequently must use a pre-condition `if (head != NULL)` followed by a `do { ... } while (curr != NULL);` loop. This forces GCC to emit the exact 6-instruction loop footprint seen in many of Xenogears' list iterations.",
+      "tags": [
+        "optimization",
+        "loops",
+        "linked-lists"
+      ],
+      "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_009",
+      "concept": "Struct Black Box Explosion via Initializers",
+      "description": "When faced with a giant `unknown_data[0xNN]` array inside a struct, search for its initialization function in the assembly logic. Because the object initializer must manually reset the inner bytes to zero/default values, decompiling the initializer function quickly uncovers the explicit `u8`, `u16`, and `u32` variables hidden inside the array.",
+      "tags": [
+        "structs",
+        "reverse-engineering",
+        "data-structures"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }

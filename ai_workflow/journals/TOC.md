@@ -3,7 +3,7 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Manual Decompilation Validated.** I have successfully manually decompiled `func_80021FB8` (a 4-line `sb` leaf function), compiled it via `make clean-build`, and verified it matches the original game byte-for-byte using `objdiff`. The repository's matched function count has officially increased. The entire workflow is proven sound and ready to be orchestrated.
+- **Sound Subsystem Decompilation:** A major breakthrough in decompiling the `system/sound.c` file has occurred. Successfully mapped and perfectly decompiled several core SPU allocation routines (`SoundSpuMemoryAllocateWDS`, `SoundLoadWdsFile`, `SoundElementInit`, `SoundWaitSpuTransfer`, and `SoundPlayDefaultSeds`). Discovered crucial GCC 2.6.0 compiler quirks, such as delay slot pointer hoisting and specific `do-while` syntax required to match Linked List traversals. The `AudioElement` struct black-box arrays have been systematically exploded into explicit parameters.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -22,7 +22,8 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Update header files (`types.h`, `common.h`) to establish data structures.
 
 ### Phase 4: Autonomous Orchestration (Next)
-- [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator.
+- [ ] Continue using `find_target.py` iteratively to decompile heavily referenced subsystems.
+- [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator for simpler leaf functions.
 - [ ] Implement the continuous compilation feedback loop (Pick un-matched `.s` -> Prompt AI for `.c` -> Compile -> Evaluate Diff/Fix -> Repeat).
 - [ ] Plumb the feedback loop to automatically log successful compiler tricks and heuristics back into `knowledge_base.json`.
 
@@ -41,3 +42,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | Meaningful Symbol Renaming | Documented the process of deciphering abstract memory addresses (`func_800295D8`) into cohesive functions (`ArchiveRead`) and syncing labels globally using scripts. | [2026-03-13_0012_meaningful_renaming.md](./2026-03-13_0012_meaningful_renaming.md) |
 | 2026-03-13 | SPU Sound Handle Error Decompilation | Decompiled `SoundHandleError` and recovered system error flags triggering WDS and SPU memory reloads over DMA. | [2026-03-13_0025_sound_handle_error.md](./2026-03-13_0025_sound_handle_error.md) |
 | 2026-03-13 | Data Block Mappings & SEDS Recovery | Discovered fallback default sound data structures by reading `asm/slus_006.64/data` magics and renaming them globally; decompiled SEDS playback recovery function. | [2026-03-13_0055_sound_seds_recovery.md](./2026-03-13_0055_sound_seds_recovery.md) |
+| 2026-03-13 | WDS Allocation and Delay Slots | Resolved GCC 2.6.0 instruction reordering involving MIPS branch delay slots and `do-while` linked-list matching. Exploded `AudioElement` struct black-box parameters recursively via initialization decompilation. | [2026-03-13_0130_sound_wds_allocation_delay_slots.md](./2026-03-13_0130_sound_wds_allocation_delay_slots.md) |

@@ -277,6 +277,11 @@ void func_80037F88(void) {
 
 
 
+// Loads a Wave Data Stream (WDS) file into SPU memory and appends it to the global WDS linked list.
+// Handles automatic allocation, SPU transfer, and memory tracking via SoundHeap.
+// Note on matching: The EnableEvent/DisableEvent delay slots correspond with pointer assignment
+// hoisting from GCC 2.6.0. The do-while loop structure is also explicitly necessary to match 
+// the original MIPS branch generation for linked-list traversal.
 SoundWDSEntry* SoundLoadWdsFile(SoundWDSEntry* pWdsFile, int mode) {
     int spuAddress;
     SoundWDSEntry* newEntry;
