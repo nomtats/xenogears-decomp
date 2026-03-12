@@ -36,4 +36,5 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-12 | Repository Tools Survey | Executed the Extract Tools First directive. Cataloged all scripts and utilities in `tools/`. | [2026-03-12_1848_tools_survey.md](./2026-03-12_1848_tools_survey.md) |
 | 2026-03-12 | Repository Bootstrapping | Successfully carved assets, resolved submodule build issues, and generated `objdiff` hashes. | [2026-03-12_2251_bootstrapping_success.md](./2026-03-12_2251_bootstrapping_success.md) |
 | 2026-03-12 | Manual Decompilation Execution | Replaced `INCLUDE_ASM` for `func_80021FB8.s` using `u8*` casting to target `sb` offset. Validated build. | [2026-03-12_2319_first_manual_decomp.md](./2026-03-12_2319_first_manual_decomp.md) |
+| 2026-03-12 | Fast Incremental Builds | Used `make build` to avoid clean-build cache tainting from `make report`. Matched additional leaf functions. | [2026-03-12_2334_fast_incremental_builds.md](./2026-03-12_2334_fast_incremental_builds.md) |
 
