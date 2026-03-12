@@ -1285,7 +1285,6 @@ int SoundTransferQueueSync() {
 void func_8003BDF4(void) {}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003BDFC);
-
 //----------------------------------------------------------------------------------------------------------------------
 void SoundProcessTransferCommand(void) {
     SpuTransferCallbackProc pPrevCallback;
@@ -1364,7 +1363,9 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003C6E8);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003CC84);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003CD00);
+s32 func_8003CD00(s32 a0) {
+    return a0;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003CD08);
 
@@ -1888,4 +1889,22 @@ int SoundFileComputeChecksum(SoundFile* pSoundFile) {
 }
 
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", SoundHandleError);
+extern void* SoundLoadWdsFile(void*, int);
+extern int func_8003BDFC(u32);
+extern void func_80039E60(u32);
+
+extern u32 D_80050940[];
+extern SoundFile D_80050910;
+extern u16 D_80050924[];
+
+void SoundHandleError(s32 errorId) {
+    if ((g_SoundControlFlags & 0x88) == 0) {
+        g_SoundControlFlags |= 8;
+        g_SoundSpuErrorId = errorId;
+        SoundSpuMemoryFreeBlock(0x10000);
+        SoundLoadWdsFile(D_80050940, 0);
+        SoundAddSedsEntry(&D_80050910);
+        func_8003BDFC(0x10);
+        func_80039E60((D_80050924[0] << 16) | 1);
+    }
+}
