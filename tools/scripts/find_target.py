@@ -4,6 +4,25 @@ import glob
 import sys
 import argparse
 
+"""
+find_target.py - Assembly Target Analyzer for AI Decompilation
+
+This script is designed to survey the raw PlayStation MIPS assembly output
+split by 'splat' (the `asm/*/nonmatchings/` directories) and rank functions 
+by their decompilation suitability.
+
+Metrics used for ranking:
+1. Size (Lines of code): Smaller functions (e.g., 4-8 lines) are prioritized
+   since they are easier to guess C-code for.
+2. Leaf Functions: Assembly routines that do not jump to or branch to other
+   sub-routines (e.g., lacking 'jal' instructions). Leaf functions are
+   prioritized because they do not require knowing the C signature or return
+   types of external functions.
+
+Usage:
+  python3 tools/scripts/find_target.py [--limit 20] [--path-filter "system"] [--non-leaf]
+"""
+
 def analyze_asm_files(base_dirs):
     targets = []
     
