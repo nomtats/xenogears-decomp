@@ -277,11 +277,18 @@ void func_80037F88(void) {
 
 
 
-// Loads a Wave Data Stream (WDS) file into SPU memory and appends it to the global WDS linked list.
-// Handles automatic allocation, SPU transfer, and memory tracking via SoundHeap.
-// Note on matching: The EnableEvent/DisableEvent delay slots correspond with pointer assignment
-// hoisting from GCC 2.6.0. The do-while loop structure is also explicitly necessary to match 
-// the original MIPS branch generation for linked-list traversal.
+/**
+ * @brief Loads a Wave Data Stream (WDS) file into SPU memory and appends it to the global WDS linked list.
+ * 
+ * Handles automatic allocation, SPU transfer, and memory tracking via SoundHeap.
+ * 
+ * Note on matching: The EnableEvent/DisableEvent delay slots correspond with pointer assignment
+ * hoisting from GCC 2.6.0.
+ *
+ * @param pWdsFile Pointer to the WDS data to load
+ * @param mode Allocation mode (e.g. SOUND_WDS_ALLOCATE_AT_ADDRESS or SOUND_WDS_ALLOCATE_AUTOMATIC)
+ * @return SoundWDSEntry* Pointer to the newly enqueued WDS entry, or NULL on error.
+ */
 SoundWDSEntry* SoundLoadWdsFile(SoundWDSEntry* pWdsFile, int mode) {
     int spuAddress;
     SoundWDSEntry* newEntry;
@@ -310,6 +317,9 @@ SoundWDSEntry* SoundLoadWdsFile(SoundWDSEntry* pWdsFile, int mode) {
 
     pCurrent = &g_SoundWdsLinkedList;
     if (g_SoundWdsLinkedList != NULL) {
+        // A do-while loop combined with an initial NULL check is explicitly used here
+        // to force GCC 2.6.0 to generate the exact 6-instruction sequence for list traversal
+        // seen in the original binary, rather than standard while(idx->next) block generation.
         do {
             SoundWDSEntry* pIter = *pCurrent;
             pCurrent = &pIter->pNext;
