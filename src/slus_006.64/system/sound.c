@@ -278,7 +278,6 @@ void func_80037F88(void) {
 
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", SoundLoadWdsFile);
-
 // Loads part of a WDS file, basically a sized SoundLoadWdsFile?
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_800380D0);
 
@@ -1570,7 +1569,13 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E358);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E360);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E3E0);
+void SoundElementInit(AudioElement* element) {
+    element->unk10 = 1;
+    element->unk04 = 0;
+    element->unk1E &= 0xFFF3;
+    element->unk14 = element->unk16;
+    element->unk18 = element->unk1A;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/sound", func_8003E40C);
 

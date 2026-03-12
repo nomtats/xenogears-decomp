@@ -128,7 +128,17 @@ typedef struct {
 typedef struct {
     u16 active_flag;                // 0x00 - checked for != 0
     u16 status_flags;               // 0x02 - contains bit flags of some sort
-    s8 unknown_data[0x23];          // 0x04 - 0x26
+    u32 unk04;                      // 0x04
+    u8 unknown_data[8];             // 0x08-0x0F
+    u16 unk10;                      // 0x10
+    u16 unk12;                      // 0x12
+    u16 unk14;                      // 0x14
+    u16 unk16;                      // 0x16
+    u16 unk18;                      // 0x18
+    u16 unk1A;                      // 0x1A
+    u16 unk1C;                      // 0x1C
+    u16 unk1E;                      // 0x1E
+    u8 unknown_data2[7];            // 0x20-0x26
     u8 voice_number;                // 0x27 - SPU voice index
     s8 padding[0x8];                // 0x28 - 0x2F
     SoundVoiceData voice_data;      // 0x30 - passed to cancel function
@@ -243,8 +253,17 @@ extern CdlATV g_SoundCdRomAttenuation;
 extern s32 SoundCalculateAudioManagerSize(s32 elementCount);
 extern void SoundSetVolumeWithPhase(s32, SpuVolume*, s32);
 
-extern void* SoundLoadWdsFile(void*, int);
-extern int SoundWaitSpuTransfer(u32);
+extern void SoundSpuMemoryAllocateWDS(SoundWDSEntry* pWdsFile, int mode);
+extern SoundWDSEntry* func_80039024(u32 size);
+extern void SoundQueueSpuWriteCommand(u32 transferAddress, void* pData, u_long dataSize, SoundCommandCallback_t pCallback);
+extern int SoundSpuMemoryFreeBlock(int targetAddress);
+extern void SoundHeapSetBlockMemory(void* block, void* src, s32 size);
+extern void DisableEvent(u_long event);
+extern void EnableEvent(u_long event);
+extern void SoundHandleError(s32 errorId);
+
+extern SoundWDSEntry* SoundLoadWdsFile(SoundWDSEntry* pWdsFile, int mode);
+extern int SoundWaitSpuTransfer(u32 flags);
 extern void SoundPlayDefaultSeds(u32);
 
 extern u32 g_SoundDefaultWdsData[];
