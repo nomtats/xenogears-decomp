@@ -136,6 +136,18 @@
         "mismatch"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_006",
+      "concept": "Enforcing Module Header Encapsulation for Externs",
+      "description": "Never place floating `extern void Foo();` or `extern u32 Bar[];` declarations directly inside a `.c` file unless it genuinely acts strictly as a static/private workaround (which is extremely rare). Doing so fundamentally breaks architectural encapsulation and produces unmaintainable C code. If an undefined external reference is mapped during decompilation, it MUST be declared within its corresponding public header file (e.g., `include/system/sound.h`). The source file then uses `#include \"system/sound.h\"` to resolve the symbols. This enforces strict architectural boundaries across the Xenogears decompilation effort.",
+      "tags": [
+        "architecture",
+        "headers",
+        "extern",
+        "encapsulation"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }
