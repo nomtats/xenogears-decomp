@@ -1,5 +1,5 @@
 #include "common.h"
-
+#include "field/actor.h"
 // Sprite / Animation functions
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/temp1", func_80022B2C);
@@ -102,7 +102,9 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/temp1", func_80023804);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/temp1", func_8002393C);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/temp1", func_80023950);
+void func_80023950(SpriteData* pSpriteData) {
+    pSpriteData->pBase = NULL;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/system/temp1", func_80023958);
 
