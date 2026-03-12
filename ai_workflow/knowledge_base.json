@@ -112,6 +112,18 @@
         "register-allocation"
       ],
       "date_added": "2026-03-12"
+    },
+    {
+      "id": "pattern_example_004",
+      "concept": "Global Symbol Renaming (Splat/GCC)",
+      "description": "When renaming an unintuitive generated label (like func_800295D8 or D_8004FE18) into a meaningful human-readable C name, you MUST execute a global search-and-replace across the entire repository. This includes: src/ (.c), include/ (.h), asm/ (.s), config/ (.txt symbol maps), and yaml/ (Splat definitions). Failure to update the YAML or config strings will cause catastrophic 'undefined reference' linker errors during make check, because the compiled objects will attempt to link against the previous arbitrary name.",
+      "tags": [
+        "refactoring",
+        "linker",
+        "splat",
+        "symbols"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }

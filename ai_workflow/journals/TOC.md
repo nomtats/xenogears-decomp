@@ -38,4 +38,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-12 | Manual Decompilation Execution | Replaced `INCLUDE_ASM` for `func_80021FB8.s` using `u8*` casting to target `sb` offset. Validated build. | [2026-03-12_2319_first_manual_decomp.md](./2026-03-12_2319_first_manual_decomp.md) |
 | 2026-03-12 | Fast Incremental Builds | Used `make build` to avoid clean-build cache tainting from `make report`. Matched additional leaf functions. | [2026-03-12_2334_fast_incremental_builds.md](./2026-03-12_2334_fast_incremental_builds.md) |
 | 2026-03-12 | Target Reference Scripting & GCC Register Overrides | Rewrote `find_target.py` to sort unmatched functions by caller density. Matched highest target via `asm("reg")` explicit GCC extensions. | [2026-03-12_2348_gcc_register_casting.md](./2026-03-12_2348_gcc_register_casting.md) |
-
+| 2026-03-13 | Meaningful Symbol Renaming | Documented the process of deciphering abstract memory addresses (`func_800295D8`) into cohesive functions (`ArchiveRead`) and syncing labels globally using scripts. | [2026-03-13_0012_meaningful_renaming.md](./2026-03-13_0012_meaningful_renaming.md) |
