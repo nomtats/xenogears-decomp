@@ -30,6 +30,18 @@
         "objdiff"
       ],
       "date_added": "2026-03-12"
+    },
+    {
+      "id": "asset_extraction_001",
+      "concept": "PS1 Disc Format and Custom Overlays",
+      "description": "Standard disc images like `.mdf` often use 2448-byte sectors (with 96-byte padding). These must be stripped to 2352-byte standard `.bin` format using `tools/scripts/strip_mdf.py`. Xenogears stores its overlays (FIELD.BIN, MOVIE.BIN) inside custom LZSS compressed CD sectors, which cannot be seen via standard ISO 9660. The repository provides `tools/scripts/extract_overlays.py` to carve these directly from `Xenogears.bin`.",
+      "tags": [
+        "assets",
+        "extraction",
+        "mdf",
+        "lzss"
+      ],
+      "date_added": "2026-03-12"
     }
   ],
   "patterns": [
