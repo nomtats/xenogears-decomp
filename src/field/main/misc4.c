@@ -784,7 +784,7 @@ int func_80085F30(void) {
     pWdsEntry = SoundLoadWdsFile(D_800B00E0, 0);
     D_8006251C = pWdsEntry;
     D_80059560 = pWdsEntry;
-    func_8003BDFC(0x10);
+    SoundWaitSpuTransfer(0x10);
     HeapFree(D_800B00E0);
     D_8004F364 = 1;
     D_8004F384 = 0;
