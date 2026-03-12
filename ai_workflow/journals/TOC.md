@@ -17,4 +17,5 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-12 | Meta-Workflow Initialization | Established the self-improvement loop, knowledge base structure, and journaling system. | [2026-03-12_workflow_initialization.md](./2026-03-12_workflow_initialization.md) |
 | 2026-03-12 | System Requirements Analysis | Analyzed `Makefile` and CI dependencies. Identified requirement for Docker and original PS1 binaries. | [2026-03-12_system_analysis.md](./2026-03-12_system_analysis.md) |
 | 2026-03-12 | Asset Extraction & Meta-Learnings | Extracted PS1 disc using repository python scripts. Adopted new 'Pause When Struggling' directive. | [2026-03-12_asset_extraction_learnings.md](./2026-03-12_asset_extraction_learnings.md) |
+| 2026-03-12 | Repository Tools Survey | Executed the Extract Tools First directive. Cataloged all scripts and utilities in `tools/`. | [2026-03-12_tools_survey.md](./2026-03-12_tools_survey.md) |
 
