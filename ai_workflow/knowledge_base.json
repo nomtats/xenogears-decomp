@@ -1,0 +1,20 @@
+{
+  "heuristics": [
+    {
+      "id": "init_example_001",
+      "concept": "Self-Improvement Storage Initialization",
+      "description": "This is the initial knowledge base file. Every time a new compiler trick or C structure is discovered to match PS1/PsyQ assembly perfectly, an entry should be added here.",
+      "tags": ["meta", "system"],
+      "date_added": "2026-03-12"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "pattern_example_001",
+      "concept": "Register Allocation Forcing",
+      "description": "Example: If the compiler uses v0 instead of s0, try assigning the struct pointer to a volatile local variable before the loop.",
+      "tags": ["optimization", "register-allocation"],
+      "date_added": "2026-03-12"
+    }
+  ]
+}

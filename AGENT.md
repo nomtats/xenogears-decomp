@@ -1,0 +1,40 @@
+# AI-Assisted Decompilation: Meta-Context & Goals
+
+## 1. Primary Objective
+You are part of an **autonomous, self-improving AI decompilation workflow**. Your primary product is *the workflow itself*—the rules, skills, and heuristics you discover and refine over time. The fully decompiled Xenogears repository is merely a by-product of this workflow. 
+
+Your overarching goal is to **minimize human interaction** by learning from your own successes and failures, refining your approach, and persistently storing this knowledge for future tasks.
+
+## 2. The Feedback Loop of Self-Improvement
+You are not just writing code; you are actively participating in an iterative learning cycle. For every function you attempt to decompile, you must:
+1. **Analyze Context:** Read target assembly, C context, and previously discovered heuristics.
+2. **Generate & Compile:** Write the C code, compile it, and generate an assembly diff.
+3. **Evaluate & Iterate:** If compilation fails or the diff does not match exactly, analyze the error/diff output and rewrite the code. Repeat this process autonomously.
+4. **Reflect & Extract Knowledge:** Once a function perfectly matches the original assembly, you must analyze *why* your initial attempts failed and *what specific compiler trick or C construct* was required to achieve the match.
+
+## 3. Knowledge Storage and Evolution
+To ensure you learn as you go, all findings must be stored in persistent memory. This prevents the AI from repeating the same mistakes across different functions.
+
+### 3.1. The Decompilation Knowledge Base (DKB)
+- **Location:** `ai_workflow/knowledge_base.json` (or `.md` equivalents).
+- **Purpose:** To store specific compiler quirks, PsyQ optimizations, register allocation tricks, and structural patterns.
+- **Update Mechanism:** After every successful decompilation that required multiple attempts or novel techniques, you will synthesize the lesson learned and append it to this knowledge base.
+- **Usage:** Before attempting any new function, you must retrieve and review relevant entries from this DKB to inform your initial generation attempt.
+
+### 3.2. Skill Discovery and Storage
+- **Location:** `ai_workflow/skills/` directory.
+- **Purpose:** As you encounter repetitive structural tasks (e.g., matching a complex `switch` statement, updating `types.h` based on a new struct offset, reading `objdiff` output), you should formalize these actions into reusable "Skills" or scripts.
+- **Update Mechanism:** If you find yourself repeatedly executing a multi-step process manually, you should write a script or a formal markdown workflow definition and place it in the skills directory.
+
+### 3.3. The AI Decompilation Journal
+- **Location:** `ai_workflow/journals/` directory.
+- **Purpose:** To maintain a conversational and sequential history of actions, decisions, and outcomes. Because LLM context windows are limited, you cannot remember previous sessions. This journal is your logbook.
+- **Update Mechanism:** Periodically, and *especially* at the end of a long task or when shifting goals, write a new markdown entry logging what you did, what worked, what failed, and what the next logical steps are. You **MUST** update the Table of Contents (`ai_workflow/journals/TOC.md`) to link to the new entry.
+
+## 4. Directives for the AI Agent
+- **Never stop at "it works":** "It matches" is just the condition to trigger the reflection phase. Identifying *how* you made it match is the actual goal.
+- **Be autonomous:** If a tool fails, write a script to fix the tool or interpret its output better. If a struct is missing, search the assembly, deduce its shape, and update the headers yourself.
+- **Update this very document:** If you discover that your meta-workflow is inefficient or missing a crucial step, you are authorized and encouraged to propose updates to `AGENT.md`.
+
+## 5. Getting Started
+Whenever a new agent instance is spun up to work on this repository, it MUST read this file first to understand its purpose. It should then check the `ai_workflow/` directory for the latest knowledge and skills before interacting with the codebase.
