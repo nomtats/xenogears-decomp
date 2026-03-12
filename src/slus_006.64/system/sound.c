@@ -1889,14 +1889,17 @@ int SoundFileComputeChecksum(SoundFile* pSoundFile) {
 }
 
 
-extern void* SoundLoadWdsFile(void*, int);
-extern int func_8003BDFC(u32);
-extern void func_80039E60(u32);
-
-extern u32 D_80050940[];
-extern SoundFile D_80050910;
-extern u16 D_80050924[];
-
+/**
+ * @brief Handles catastrophic hardware SPU (Sound Processing Unit) errors.
+ * 
+ * When the audio sub-system experiences critical faults (e.g. DMA transfer failures
+ * or buffer under-runs), this error trap is called. It throws a global error flag
+ * to prevent re-entrancy, records the specific error ID, forces the SPU dynamic memory 
+ * structure to cleanly release the top `0x10000` block, and attempts a system recovery
+ * by triggering a complete refresh of the WDS and SED instrument tables over the bus.
+ *
+ * @param errorId The identifier (enum/code) indicating the root cause of the crash.
+ */
 void SoundHandleError(s32 errorId) {
     if ((g_SoundControlFlags & 0x88) == 0) {
         g_SoundControlFlags |= 8;

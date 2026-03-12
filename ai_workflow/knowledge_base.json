@@ -124,6 +124,18 @@
         "symbols"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_005",
+      "concept": "GCC 2.7.2 Infinite Spin Loop Optimization Mismatches",
+      "description": "When decompiling PsyQ hardware spin routines (like `while(flag & 0x10) {}`), PsyQ literally compiles `lui` and `lhu` load instructions directly inside the loop branch. Modern GCC perfectly translates this with the `volatile` keyword. However, old MIPS GCC 2.7.2 is notoriously stubborn about loop-invariant code motion (hoisting). It will frequently pull the pointer setup `lui` instruction outside the loop branch and only re-execute `lhu`, completely breaking byte-for-byte matching. Standard tricks like local `extern volatile short` or inline empty `asm(\"\")` barriers often fail to perfectly replicate the original PsyQ `lui/lhu` tight coupling. If a spin loop fails matching due to hoisted registers, it is acceptable (and often necessary) to leave it as `INCLUDE_ASM` rather than writing convoluted unreadable C.",
+      "tags": [
+        "optimization",
+        "loops",
+        "volatile",
+        "mismatch"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }
