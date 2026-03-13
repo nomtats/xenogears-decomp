@@ -5,7 +5,9 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 ## 🟢 Current Status
 - **Phase 4 (Sustained Manual Decompilation)** is active. We are executing the "Jigsaw Strategy," starting by decompiling highly-referenced "True Leaf" nodes (functions with 0 callees).
 - We have successfully cleared our first edge targets: `SetTransMatrix`, `SetRotMatrix`, and `PCclose` by matching inline Coprocessor 2 and Exception assembly.
-- Our immediate next steps are to continue solving the top heavily-referenced leaf targets from `ai_workflow/analysis/call_graph_report.md` (e.g. `NormalClip`, `func_8008CF3C`, `memcpy`) to progressively shrink the "unknown" footprint underlying all major systems.
+- Added a new **Micro-Build Workflow Strategy**: By running `make build/src/.../file.o` iteratively instead of standard `make build`, we compile object loops in milliseconds without linker issues.
+- Using the new strategy, we successfully perfectly matched `memcpy` in `libc.c` utilizing a branch delay-slot shifting trick.
+- Our immediate next steps are to continue solving the top heavily-referenced leaf targets from `ai_workflow/analysis/call_graph_report.md` (e.g. `bzero`, `memset`, `NormalClip`, `func_8008CF3C`) to progressively shrink the "unknown" footprint underlying all major systems.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -59,3 +61,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | Static Call Graph Analysis | Removed `find_target.py`, replacing it with `generate_call_graph.py` which tracks R_MIPS_26 relocations and groups stats by subsystem to accurately map "True Leaf" nodes. | [2026-03-13_1215_call_graph_generation.md](./2026-03-13_1215_call_graph_generation.md) |
 | 2026-03-13 | PsyQ SDK Inline Assembly | Decompiled highly referenced SDK functions (`SetRotMatrix`, `SetTransMatrix`, `PCclose`) using MIPS `break` and `__asm__ volatile` coping with maspsx parser issues involving integer bases. | [2026-03-13_1416_psyq_sdk_inline_asm.md](./2026-03-13_1416_psyq_sdk_inline_asm.md) |
 | 2026-03-13 | libsn Inline Assembly Clean-up | Reverted lazy `PCread`/`PCwrite` block assembly copying back to `INCLUDE_ASM`, and added proper Doxygen-style documentation to the true 1-liner wrapper functions in `libsn.c`. | [2026-03-13_1615_libsn_doxygen.md](./2026-03-13_1615_libsn_doxygen.md) |
+| 2026-03-13 | Micro-Build Strategy and Memcpy | Pioneered object-level iteration bypassing standard `.elf` linkers and achieved a 100% byte-match for `memcpy` by pushing pointer assignment into the GCC size-check delay slot. | [2026-03-13_1640_microbuild_and_memcpy.md](./2026-03-13_1640_microbuild_and_memcpy.md) |

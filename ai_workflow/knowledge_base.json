@@ -204,6 +204,17 @@
         "comments"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_012",
+      "concept": "GCC Branch Delay Slot Assignment Placement",
+      "description": "If a memory assignment (e.g. `start = pDst`) needs to be pushed into the branch delay slot of an immediately following condition (like `if (size <= 0)`), placing the assignment operation *after required early returns* but directly before the condition block allows GCC to effectively tuck the operation into the MIPS delay slot natively instead of executing it before evaluating the condition. This trick is essential for 1-to-1 matching in memory-tight standard library functions like `memcpy`.",
+      "tags": [
+        "optimization",
+        "delay-slots",
+        "mismatch"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }

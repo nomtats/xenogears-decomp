@@ -2,9 +2,9 @@
 
 ## 📈 Global Progress
 - **Total Functions:** 1927
-- **Decompiled (Matched):** 674
-- **Remaining (Unmatched):** 1253
-- **Overall Completion:** 34.98%
+- **Decompiled (Matched):** 680
+- **Remaining (Unmatched):** 1247
+- **Overall Completion:** 35.29%
 
 ## 📁 Module Progress
 | Module | Matched | Unmatched | Total | Progress |
@@ -23,14 +23,14 @@
 | `src/slus_006.64/psyq/libapi` | 5 | 21 | 26 | 19.2% |
 | `src/slus_006.64/psyq/libapi_2` | 0 | 8 | 8 | 0.0% |
 | `src/slus_006.64/psyq/libapi_3` | 0 | 1 | 1 | 0.0% |
-| `src/slus_006.64/psyq/libc` | 4 | 8 | 12 | 33.3% |
+| `src/slus_006.64/psyq/libc` | 5 | 7 | 12 | 41.7% |
 | `src/slus_006.64/psyq/libc2` | 4 | 0 | 4 | 100.0% |
 | `src/slus_006.64/psyq/libcard` | 1 | 6 | 7 | 14.3% |
 | `src/slus_006.64/psyq/libcd` | 49 | 0 | 49 | 100.0% |
 | `src/slus_006.64/psyq/libetc` | 25 | 3 | 28 | 89.3% |
 | `src/slus_006.64/psyq/libgpu` | 42 | 24 | 66 | 63.6% |
 | `src/slus_006.64/psyq/libgte` | 2 | 92 | 94 | 2.1% |
-| `src/slus_006.64/psyq/libsn` | 1 | 7 | 8 | 12.5% |
+| `src/slus_006.64/psyq/libsn` | 6 | 2 | 8 | 75.0% |
 | `src/slus_006.64/psyq/libspu` | 42 | 1 | 43 | 97.7% |
 | `src/slus_006.64/system/animation_scripts` | 4 | 30 | 34 | 11.8% |
 | `src/slus_006.64/system/archive` | 9 | 2 | 11 | 81.8% |
@@ -55,10 +55,8 @@ The best un-matched targets across the entire codebase, prioritizing 'True Leaf'
 | `NormalClip` | `src/slus_006.64/psyq/libgte` | 10 | 0 | 15 |
 | `func_8008CF3C` | `src/field/main/misc` | 10 | 0 | 30 |
 | `CompMatrix` | `src/slus_006.64/psyq/libgte` | 10 | 0 | 91 |
-| `memcpy` | `src/slus_006.64/psyq/libc` | 9 | 0 | 18 |
 | `SetGeomScreen` | `src/slus_006.64/psyq/libgte` | 8 | 0 | 7 |
 | `func_8009A514` | `src/field/main/misc` | 8 | 0 | 10 |
-| `PCopen` | `src/slus_006.64/psyq/libsn` | 8 | 0 | 11 |
 | `SoundWaitSpuTransfer` | `src/slus_006.64/system/sound` | 8 | 0 | 32 |
 | `RotAverage4` | `src/slus_006.64/psyq/libgte` | 8 | 0 | 35 |
 | `ScaleMatrix` | `src/slus_006.64/psyq/libgte` | 8 | 0 | 78 |
@@ -70,8 +68,10 @@ The best un-matched targets across the entire codebase, prioritizing 'True Leaf'
 | `func_800A0C94` | `src/field/main/misc6` | 7 | 0 | 44 |
 | `func_8004A414` | `src/slus_006.64/psyq/libgte` | 6 | 0 | 13 |
 | `func_8003E5BC` | `src/slus_006.64/system/sound` | 6 | 0 | 51 |
-| `PClseek` | `src/slus_006.64/psyq/libsn` | 5 | 0 | 12 |
 | `func_80080968` | `src/field/main/misc4` | 5 | 0 | 29 |
+| `MulMatrix2` | `src/slus_006.64/psyq/libgte` | 5 | 0 | 71 |
+| `func_8004A19C` | `src/slus_006.64/psyq/libgte` | 4 | 0 | 9 |
+| `func_8004A260` | `src/slus_006.64/psyq/libgte` | 4 | 0 | 10 |
 
 ## 🎯 Top Targets by Module
 Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily referenced.
@@ -107,8 +107,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_8008CF3C` | `misc.c` | 10 | 0 | 30 |
 | `func_8009A514` | `misc.c` | 8 | 0 | 10 |
 | `func_80095124` | `misc.c` | 4 | 0 | 46 |
-| `func_8009501C` | `misc.c` | 3 | 0 | 42 |
 | `func_800950A0` | `misc.c` | 3 | 0 | 42 |
+| `func_8009501C` | `misc.c` | 3 | 0 | 42 |
 | `func_80092424` | `misc.c` | 3 | 0 | 52 |
 | `func_800924D4` | `misc.c` | 3 | 0 | 61 |
 | `func_8008D2E0` | `misc.c` | 2 | 0 | 13 |
@@ -119,8 +119,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
 | `func_80073930` | `misc2.c` | 2 | 0 | 26 |
-| `func_80072398` | `misc2.c` | 1 | 0 | 24 |
 | `func_8007234C` | `misc2.c` | 1 | 0 | 24 |
+| `func_80072398` | `misc2.c` | 1 | 0 | 24 |
 | `func_8007469C` | `misc2.c` | 1 | 0 | 31 |
 | `func_80073734` | `misc2.c` | 0 | 0 | 9 |
 | `func_80076A74` | `misc2.c` | 0 | 0 | 21 |
@@ -208,14 +208,14 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | :--- | :--- | :--- | :--- | :--- |
 | `ChangeClearPAD` | `libapi.c` | 7 | 0 | 10 |
 | `SysDeqIntRP` | `libapi.c` | 2 | 0 | 6 |
-| `StartPAD2` | `libapi.c` | 1 | 0 | 6 |
-| `func_80040ABC` | `libapi.c` | 1 | 0 | 6 |
-| `StopPAD2` | `libapi.c` | 1 | 0 | 6 |
-| `WaitEvent` | `WaitEvent.c` | 1 | 0 | 6 |
-| `SysEnqIntRP` | `libapi.c` | 1 | 0 | 6 |
 | `InitPAD2` | `libapi.c` | 1 | 0 | 6 |
-| `func_80040B00` | `libapi.c` | 1 | 0 | 7 |
+| `StartPAD2` | `libapi.c` | 1 | 0 | 6 |
+| `StopPAD2` | `libapi.c` | 1 | 0 | 6 |
+| `func_80040ABC` | `libapi.c` | 1 | 0 | 6 |
+| `SysEnqIntRP` | `libapi.c` | 1 | 0 | 6 |
+| `WaitEvent` | `WaitEvent.c` | 1 | 0 | 6 |
 | `EnablePAD` | `libapi.c` | 1 | 0 | 7 |
+| `func_80040B00` | `libapi.c` | 1 | 0 | 7 |
 
 ### `src/slus_006.64/psyq/libapi_2`
 | Function | File | Callers | Callees | ASM Lines |
@@ -237,7 +237,6 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 ### `src/slus_006.64/psyq/libc`
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
-| `memcpy` | `libc.c` | 9 | 0 | 18 |
 | `Sprintf` | `libc.c` | 2 | 0 | 604 |
 | `bzero` | `libc.c` | 1 | 0 | 16 |
 | `memset` | `libc.c` | 0 | 0 | 16 |
@@ -249,8 +248,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 ### `src/slus_006.64/psyq/libcard`
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
-| `StartCARD2` | `libcard.c` | 1 | 0 | 6 |
 | `InitCARD2` | `libcard.c` | 1 | 0 | 6 |
+| `StartCARD2` | `libcard.c` | 1 | 0 | 6 |
 | `StopCARD2` | `libcard.c` | 1 | 0 | 6 |
 | `_card_info` | `libcard.c` | 0 | 0 | 6 |
 | `InitCARD` | `libcard.c` | 1 | 6 | 23 |
@@ -294,11 +293,6 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 ### `src/slus_006.64/psyq/libsn`
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
-| `PCopen` | `libsn.c` | 8 | 0 | 11 |
-| `PClseek` | `libsn.c` | 5 | 0 | 12 |
-| `PCinit` | `libsn.c` | 4 | 0 | 5 |
-| `PCcreate` | `libsn.c` | 2 | 0 | 11 |
-| `func_8004C458` | `libsn.c` | 1 | 0 | 9 |
 | `PCread` | `libsn.c` | 7 | 1 | 55 |
 | `PCwrite` | `libsn.c` | 2 | 1 | 55 |
 
@@ -364,8 +358,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_8003E5BC` | `sound.c` | 6 | 0 | 51 |
 | `func_8003F43C` | `sound.c` | 2 | 0 | 13 |
 | `func_8003A838` | `sound.c` | 2 | 0 | 30 |
-| `func_8003A344` | `sound.c` | 2 | 0 | 33 |
 | `func_8003A55C` | `sound.c` | 2 | 0 | 33 |
+| `func_8003A344` | `sound.c` | 2 | 0 | 33 |
 | `SoundEnableAllSpuChannels` | `sound.c` | 1 | 0 | 26 |
 | `SoundMuteAllSpuChannels` | `sound.c` | 1 | 0 | 27 |
 | `func_8003EEA0` | `sound.c` | 1 | 0 | 29 |
@@ -391,8 +385,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_80030B14` | `temp2.c` | 2 | 0 | 78 |
 | `func_8002DFE0` | `temp2.c` | 1 | 0 | 6 |
 | `func_8002CCAC` | `temp2.c` | 1 | 0 | 9 |
-| `func_8002C6E0` | `temp2.c` | 1 | 0 | 10 |
 | `func_8002DFF0` | `temp2.c` | 1 | 0 | 10 |
+| `func_8002C6E0` | `temp2.c` | 1 | 0 | 10 |
 | `func_80031804` | `temp2.c` | 1 | 0 | 11 |
 | `func_800317E0` | `temp2.c` | 1 | 0 | 11 |
 | `func_80030C40` | `temp2.c` | 1 | 0 | 17 |

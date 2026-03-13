@@ -4,7 +4,36 @@ extern u_long g_RandomSeed;
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", bzero);
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", memchr);
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", memcpy);
+/**
+ * @brief Copies size bytes from pSrc to pDst.
+ * 
+ * @param pDst Destination buffer.
+ * @param pSrc Source buffer.
+ * @param size Number of bytes to copy.
+ * @return void* Pointer to the destination buffer (pDst), or NULL if it was null.
+ */
+void* memcpy(u_char* pDst, u_char* pSrc, int size) {
+    u_char* start;
+
+    if (pDst == NULL) {
+        return NULL;
+    }
+
+    /* Assigning `start` after the first branch allows the compiler to push 
+       `start = pDst` into the branch delay slot of `blez $a2` (the size check)
+       instead of at the very beginning of the function. */
+    start = pDst;
+    if (size > 0) {
+        do {
+            *pDst = *pSrc;
+            pSrc++;
+            size--;
+            pDst++;
+        } while (size > 0);
+    }
+
+    return start;
+}
 
 void* memmove(u_char* pDst, u_char* pSrc, int size) {
     if (pDst >= pSrc) {
