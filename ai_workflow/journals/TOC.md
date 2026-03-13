@@ -4,7 +4,7 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 
 ## 🟢 Current Status
 - **Phase 4 (Sustained Manual Decompilation)** is active. We successfully replaced the naive target generation script with `generate_call_graph.py`, leveraging `make clean-build` without `SKIP_ASM=1` to accurately parse `R_MIPS_26` relocations and reveal true caller/callee counts.
-- We have identified `func_8003E5BC` (in `system/sound.c`) as the highest priority target: a true leaf function (0 callees) with 6 callers and a highly manageable 19 lines of assembly. Manual decompilation of this block is our immediate next step.
+- We have shifted our target criteria to follow the "Jigsaw Strategy." Our immediate next step is to manually decompile the highly-referenced standard library SDK functions in the `src/slus_006.64/psyq` module (like `SetTransMatrix`, `SetRotMatrix`, or `PCclose`). Clearing these "edges" of the puzzle will massively reduce abstract register guessing in the deeper game logic.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
