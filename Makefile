@@ -244,6 +244,9 @@ clean-progress: clean
 	$(MAKE) generate
 	$(MAKE) progress
 
+analyze_graph:
+	@$(PYTHON) tools/scripts/generate_call_graph.py
+
 # Recipes
 
 # .elf targets

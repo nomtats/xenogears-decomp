@@ -11,3 +11,4 @@ expected/
 notes/
 .venv/
 objdiff.json
+ai_workflow/analysis/call_graph.json
