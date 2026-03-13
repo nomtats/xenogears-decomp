@@ -1,10 +1,10 @@
 # Xenogears Decompilation & Call Graph Analysis
 
 ## 📈 Global Progress
-- **Total Functions:** 1926
-- **Decompiled (Matched):** 681
-- **Remaining (Unmatched):** 1245
-- **Overall Completion:** 35.36%
+- **Total Functions:** 1925
+- **Decompiled (Matched):** 679
+- **Remaining (Unmatched):** 1246
+- **Overall Completion:** 35.27%
 
 ## 📁 Module Progress
 | Module | Matched | Unmatched | Total | Progress |
@@ -28,10 +28,10 @@
 | `src/slus_006.64/psyq/libcard` | 1 | 6 | 7 | 14.3% |
 | `src/slus_006.64/psyq/libcd` | 49 | 0 | 49 | 100.0% |
 | `src/slus_006.64/psyq/libetc` | 25 | 3 | 28 | 89.3% |
-| `src/slus_006.64/psyq/libgpu` | 43 | 23 | 66 | 65.2% |
+| `src/slus_006.64/psyq/libgpu` | 42 | 24 | 66 | 63.6% |
 | `src/slus_006.64/psyq/libgte` | 2 | 92 | 94 | 2.1% |
 | `src/slus_006.64/psyq/libsn` | 6 | 2 | 8 | 75.0% |
-| `src/slus_006.64/psyq/libspu` | 43 | 0 | 43 | 100.0% |
+| `src/slus_006.64/psyq/libspu` | 42 | 0 | 42 | 100.0% |
 | `src/slus_006.64/system/animation_scripts` | 4 | 30 | 34 | 11.8% |
 | `src/slus_006.64/system/archive` | 9 | 2 | 11 | 81.8% |
 | `src/slus_006.64/system/controller` | 11 | 0 | 11 | 100.0% |
@@ -67,8 +67,8 @@ The best un-matched targets across the entire codebase, prioritizing 'True Leaf'
 | `MoveImage` | `src/slus_006.64/psyq/libgpu` | 3 | 0 | 53 |
 | `PCread` | `src/slus_006.64/psyq/libsn` | 3 | 0 | 55 |
 | `func_8003B644` | `src/slus_006.64/system/sound` | 3 | 0 | 200 |
-| `HookEntryInt` | `src/slus_006.64/psyq/libapi_2` | 2 | 0 | 6 |
 | `ChangeClearRCnt` | `src/slus_006.64/psyq/libapi_3` | 2 | 0 | 6 |
+| `HookEntryInt` | `src/slus_006.64/psyq/libapi_2` | 2 | 0 | 6 |
 | `func_8009E810` | `src/field/main/misc6` | 2 | 0 | 13 |
 | `SoundWaitSpuTransfer` | `src/slus_006.64/system/sound` | 2 | 0 | 32 |
 | `RotAverage4` | `src/slus_006.64/psyq/libgte` | 2 | 0 | 35 |
@@ -106,14 +106,14 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | :--- | :--- | :--- | :--- | :--- |
 | `func_80092404` | `misc.c` | 0 | 0 | 10 |
 | `func_80088D18` | `misc.c` | 0 | 0 | 10 |
-| `func_8009A514` | `misc.c` | 0 | 0 | 10 |
 | `func_800923E4` | `misc.c` | 0 | 0 | 10 |
 | `func_80088CF8` | `misc.c` | 0 | 0 | 10 |
+| `func_8009A514` | `misc.c` | 0 | 0 | 10 |
 | `func_800961F0` | `misc.c` | 0 | 0 | 11 |
-| `func_8009C104` | `misc.c` | 0 | 0 | 12 |
 | `func_80087C0C` | `misc.c` | 0 | 0 | 12 |
-| `func_800961C8` | `misc.c` | 0 | 0 | 12 |
-| `func_8009C0DC` | `misc.c` | 0 | 0 | 12 |
+| `func_80096150` | `misc.c` | 0 | 0 | 12 |
+| `func_800961A0` | `misc.c` | 0 | 0 | 12 |
+| `func_8009B15C` | `misc.c` | 0 | 0 | 12 |
 
 ### `src/field/main/misc2`
 | Function | File | Callers | Callees | ASM Lines |
@@ -147,13 +147,13 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_80085634` | `misc4.c` | 4 | 0 | 21 |
 | `func_8007F6F8` | `misc4.c` | 2 | 0 | 74 |
 | `func_8007CD60` | `misc4.c` | 0 | 0 | 10 |
+| `func_800831D0` | `misc4.c` | 0 | 0 | 11 |
 | `func_8007CD3C` | `misc4.c` | 0 | 0 | 11 |
 | `func_80081F5C` | `misc4.c` | 0 | 0 | 11 |
-| `func_800831D0` | `misc4.c` | 0 | 0 | 11 |
 | `func_8007C670` | `misc4.c` | 0 | 0 | 13 |
 | `func_8007B694` | `misc4.c` | 0 | 0 | 14 |
-| `func_80086D4C` | `misc4.c` | 0 | 0 | 18 |
 | `func_800864B4` | `misc4.c` | 0 | 0 | 18 |
+| `func_80086D4C` | `misc4.c` | 0 | 0 | 18 |
 
 ### `src/field/main/misc5`
 | Function | File | Callers | Callees | ASM Lines |
@@ -167,7 +167,7 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_800A9274` | `misc5.c` | 0 | 0 | 17 |
 | `func_800A98B4` | `misc5.c` | 0 | 0 | 17 |
 | `func_800A9B1C` | `misc5.c` | 0 | 0 | 18 |
-| `func_800A9460` | `misc5.c` | 0 | 0 | 20 |
+| `func_800ACCB0` | `misc5.c` | 0 | 0 | 20 |
 
 ### `src/field/main/misc6`
 | Function | File | Callers | Callees | ASM Lines |
@@ -181,7 +181,7 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_800A0C4C` | `misc6.c` | 0 | 0 | 20 |
 | `func_800A0DFC` | `misc6.c` | 0 | 0 | 24 |
 | `func_800A0E54` | `misc6.c` | 0 | 0 | 27 |
-| `func_8009FCAC` | `misc6.c` | 0 | 0 | 28 |
+| `func_8009FC48` | `misc6.c` | 0 | 0 | 28 |
 
 ### `src/field/scripts`
 | Function | File | Callers | Callees | ASM Lines |
@@ -208,14 +208,14 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | :--- | :--- | :--- | :--- | :--- |
 | `ChangeClearPAD` | `libapi.c` | 3 | 0 | 10 |
 | `WaitEvent` | `WaitEvent.c` | 1 | 0 | 6 |
-| `func_8004076C` | `libapi.c` | 0 | 0 | 6 |
+| `SysDeqIntRP` | `libapi.c` | 0 | 0 | 6 |
+| `func_80040ABC` | `libapi.c` | 0 | 0 | 6 |
+| `func_8004077C` | `libapi.c` | 0 | 0 | 6 |
 | `SysEnqIntRP` | `libapi.c` | 0 | 0 | 6 |
 | `InitPAD2` | `libapi.c` | 0 | 0 | 6 |
-| `StopPAD2` | `libapi.c` | 0 | 0 | 6 |
-| `SysDeqIntRP` | `libapi.c` | 0 | 0 | 6 |
+| `func_8004076C` | `libapi.c` | 0 | 0 | 6 |
 | `StartPAD2` | `libapi.c` | 0 | 0 | 6 |
-| `func_8004077C` | `libapi.c` | 0 | 0 | 6 |
-| `func_80040ABC` | `libapi.c` | 0 | 0 | 6 |
+| `StopPAD2` | `libapi.c` | 0 | 0 | 6 |
 
 ### `src/slus_006.64/psyq/libapi_2`
 | Function | File | Callers | Callees | ASM Lines |
@@ -238,20 +238,20 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
 | `Sprintf` | `libc.c` | 2 | 0 | 604 |
-| `memset` | `libc.c` | 0 | 0 | 16 |
 | `bzero` | `libc.c` | 0 | 0 | 16 |
+| `memset` | `libc.c` | 0 | 0 | 16 |
 | `func_8003FB84` | `libc.c` | 0 | 0 | 22 |
 | `memchr` | `libc.c` | 0 | 0 | 26 |
 | `func_8003FB20` | `libc.c` | 0 | 0 | 33 |
-| `func_8003FA78` | `libc.c` | 0 | 0 | 49 |
+| `func_8003FA78` | `libc.c` | 0 | 1 | 49 |
 
 ### `src/slus_006.64/psyq/libcard`
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
 | `StartCARD2` | `libcard.c` | 1 | 0 | 6 |
-| `_card_info` | `libcard.c` | 0 | 0 | 6 |
 | `StopCARD2` | `libcard.c` | 0 | 0 | 6 |
 | `InitCARD2` | `libcard.c` | 0 | 0 | 6 |
+| `_card_info` | `libcard.c` | 0 | 0 | 6 |
 | `StopCARD` | `libcard.c` | 0 | 0 | 14 |
 | `InitCARD` | `libcard.c` | 0 | 0 | 23 |
 
@@ -280,15 +280,15 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
 | `RotAverage4` | `libgte.c` | 2 | 0 | 35 |
-| `PushMatrix` | `libgte.c` | 2 | 0 | 44 |
 | `PopMatrix` | `libgte.c` | 2 | 0 | 44 |
+| `PushMatrix` | `libgte.c` | 2 | 0 | 44 |
 | `SetGeomScreen` | `libgte.c` | 1 | 0 | 7 |
 | `SetGeomOffset` | `libgte.c` | 1 | 0 | 11 |
 | `InitGeom` | `libgte.c` | 1 | 0 | 37 |
-| `func_8004A0A4` | `libgte.c` | 0 | 0 | 6 |
-| `SetVertex0` | `libgte.c` | 0 | 0 | 6 |
-| `func_8004A098` | `libgte.c` | 0 | 0 | 6 |
+| `SetVertex1` | `libgte.c` | 0 | 0 | 6 |
+| `func_8004A024` | `libgte.c` | 0 | 0 | 6 |
 | `func_8004A0B0` | `libgte.c` | 0 | 0 | 6 |
+| `SetVertex0` | `libgte.c` | 0 | 0 | 6 |
 
 ### `src/slus_006.64/psyq/libsn`
 | Function | File | Callers | Callees | ASM Lines |
@@ -302,13 +302,13 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_80021BCC` | `animation_scripts.c` | 1 | 0 | 11 |
 | `func_80022224` | `animation_scripts.c` | 1 | 0 | 41 |
 | `func_80022A00` | `animation_scripts.c` | 0 | 0 | 5 |
-| `func_80021B14` | `animation_scripts.c` | 0 | 0 | 6 |
 | `func_80021B04` | `animation_scripts.c` | 0 | 0 | 6 |
+| `func_80021B14` | `animation_scripts.c` | 0 | 0 | 6 |
 | `func_80021D3C` | `animation_scripts.c` | 0 | 0 | 7 |
 | `AnimScriptStackPopU8` | `animation_scripts.c` | 0 | 0 | 9 |
 | `func_80021FE0` | `animation_scripts.c` | 0 | 0 | 10 |
-| `func_80021C00` | `animation_scripts.c` | 0 | 0 | 10 |
 | `func_80021FC0` | `animation_scripts.c` | 0 | 0 | 10 |
+| `func_80021C00` | `animation_scripts.c` | 0 | 0 | 10 |
 
 ### `src/slus_006.64/system/archive`
 | Function | File | Callers | Callees | ASM Lines |
@@ -339,8 +339,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_8001EE74` | `rendering.c` | 0 | 0 | 7 |
 | `func_8001D4E8` | `rendering.c` | 0 | 0 | 24 |
 | `func_8001E298` | `rendering.c` | 0 | 0 | 27 |
-| `func_8001E2F8` | `rendering.c` | 0 | 0 | 31 |
 | `func_8001E368` | `rendering.c` | 0 | 0 | 31 |
+| `func_8001E2F8` | `rendering.c` | 0 | 0 | 31 |
 | `func_8001FB30` | `rendering.c` | 0 | 0 | 31 |
 | `GraphicsDrawPauseLetters` | `rendering.c` | 0 | 0 | 33 |
 | `func_8001F530` | `rendering.c` | 0 | 0 | 38 |
@@ -370,9 +370,9 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_800231F8` | `temp1.c` | 0 | 0 | 8 |
 | `func_800231E0` | `temp1.c` | 0 | 0 | 8 |
 | `func_80027D40` | `temp1.c` | 0 | 0 | 12 |
+| `GfxFreeWorkBuffers` | `temp1.c` | 0 | 0 | 13 |
 | `func_80022E8C` | `temp1.c` | 0 | 0 | 13 |
 | `func_80023440` | `temp1.c` | 0 | 0 | 13 |
-| `GfxFreeWorkBuffers` | `temp1.c` | 0 | 0 | 13 |
 
 ### `src/slus_006.64/system/temp2`
 | Function | File | Callers | Callees | ASM Lines |
@@ -386,7 +386,7 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_8002CCAC` | `temp2.c` | 0 | 0 | 9 |
 | `func_8002CC54` | `temp2.c` | 0 | 0 | 10 |
 | `func_8002C6E0` | `temp2.c` | 0 | 0 | 10 |
-| `func_800315A0` | `temp2.c` | 0 | 0 | 11 |
+| `func_80031750` | `temp2.c` | 0 | 0 | 11 |
 
 ### `src/slus_006.64/system/temp3`
 | Function | File | Callers | Callees | ASM Lines |

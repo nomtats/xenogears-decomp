@@ -215,6 +215,19 @@
         "mismatch"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_013",
+      "concept": "GCC 2.7.2 Return Crossjumping and Delay Slot Masking",
+      "description": "When multiple early exits or paths return `NULL` (or the same variable) from a function, GCC 2.7.2 will aggressively 'crossjump' (merge) the return paths into a singular block at the bottom of the function. This explicitly destroys handwritten or unoptimized PsyQ assembly logic which expects to natively populate `move v0, zero` inside the branch delay slots. To bypass return crossjumping and force GCC to embed the variable assignment into the specific delay slot of a True Branch (bgtz, beqz, etc.), you must abandon multiple `return` statements and `if/else` logic. Instead, initialize a single tracking variable (e.g. `start = NULL`), and use purely flat `goto` structures explicitly pointing to a single `end:` label which executes the final `return start;`. This tricks the compiler into emitting the branch exactly where defined and tucking the return variable into its delay slot locally.",
+      "tags": [
+        "optimization",
+        "delay-slots",
+        "crossjumping",
+        "goto",
+        "mismatch"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }

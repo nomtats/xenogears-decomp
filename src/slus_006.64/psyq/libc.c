@@ -2,7 +2,42 @@
 
 extern u_long g_RandomSeed;
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", bzero);
+/**
+ * @brief Zeroes out a block of memory.
+ * 
+ * @param pDst Destination buffer.
+ * @param size Number of bytes to zero out.
+ * @return void* Pointer to the destination buffer, or NULL if it was null.
+ */
+void* bzero(u_char* pDst, int size) {
+    u_char* start;
+
+    /* To match PsyQ GCC's exact branch delay slot utilization where
+       the original jump locations place specific return variables in
+       delay slots without crossjumping (merging), flat goto statements 
+       are required here rather than standard structured C loops. */
+    if (pDst == NULL) {
+        return NULL;
+    }
+
+    if (size > 0) {
+        start = pDst;
+        goto loop;
+    }
+    
+    start = NULL;
+    goto end;
+
+loop:
+    do {
+        *pDst = 0;
+        size--;
+        pDst++;
+    } while (size > 0);
+
+end:
+    return start;
+}
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", memchr);
 /**
  * @brief Copies size bytes from pSrc to pDst.
