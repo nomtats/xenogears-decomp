@@ -38,7 +38,50 @@ loop:
 end:
     return start;
 }
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", memchr);
+/**
+ * @brief Locates the first occurrence of a character in a block of memory.
+ * 
+ * @param pDst Destination buffer.
+ * @param value Character to locate.
+ * @param size Number of bytes to check.
+ * @return void* Pointer to the matching byte, or NULL if it was null or not found.
+ */
+void* memchr(u_char* pDst, int value, int size) {
+    if (pDst == NULL) {
+        return NULL;
+    }
+
+    if (size <= 0) {
+        return NULL;
+    }
+    
+    /* To match PsyQ GCC's exact branch delay slot utilization, flat goto
+       statements are required here. A standard `while (size-- > 0)` loop
+       fails to generate the explicit initial jump to the loop condition 
+       with the `size--` decrement firmly seated in its delay slot. */
+    goto loop_check;
+
+match:
+    return pDst - 1;
+
+loop_check:
+    size--;
+    if (size < 0) {
+        return NULL;
+    }
+    value &= 0xFF;
+
+loop:
+    if (*pDst++ == value) {
+        goto match;
+    }
+    size--;
+    if (size >= 0) {
+        goto loop;
+    }
+
+    return NULL;
+}
 /**
  * @brief Copies size bytes from pSrc to pDst.
  * 
