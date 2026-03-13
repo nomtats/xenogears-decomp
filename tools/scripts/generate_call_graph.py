@@ -145,7 +145,8 @@ def main():
             for file in files:
                 if file.endswith(".s"):
                     func = file[:-2]
-                    unmatched_funcs.add(func)
+                    if not func.startswith("D_") and not func.startswith("jpt_"):
+                        unmatched_funcs.add(func)
                     
                     filepath = os.path.join(root, file)
                     try:

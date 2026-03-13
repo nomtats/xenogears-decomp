@@ -29,7 +29,7 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Use `generate_call_graph.py` iteratively to systematically identify and decompile heavily referenced subsystems (e.g., `system/sound.c`).
 - [x] Discover and document compiler quirks, memory layout, and branch delay slot nuances for PsyQ GCC 2.6.0/2.7.2.
 - [ ] Achieve 100% decompilation for high-priority, near-complete submodules:
-  - **`libspu`**: 97.7% complete (1 unmatched function: `D_8001946C`, 7 ASM lines).
+  - **`libspu`**: 100% complete! (Confirmed that the last unmatched symbol `D_8001946C` was just a data label falsely counted by the call graph script).
   - **`libsn`**: 12.5% complete (7 unmatched, very similar SN systems I/O routines like `PClseek`, `PCopen`, 5-55 ASM lines).
   - **`libcard`**: 14.3% complete (6 unmatched, tiny functions 6-23 ASM lines).
   - **`libc`**: 33.3% complete (8 unmatched standard library routines like `memcpy`, `bzero`).
@@ -62,3 +62,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | PsyQ SDK Inline Assembly | Decompiled highly referenced SDK functions (`SetRotMatrix`, `SetTransMatrix`, `PCclose`) using MIPS `break` and `__asm__ volatile` coping with maspsx parser issues involving integer bases. | [2026-03-13_1416_psyq_sdk_inline_asm.md](./2026-03-13_1416_psyq_sdk_inline_asm.md) |
 | 2026-03-13 | libsn Inline Assembly Clean-up | Reverted lazy `PCread`/`PCwrite` block assembly copying back to `INCLUDE_ASM`, and added proper Doxygen-style documentation to the true 1-liner wrapper functions in `libsn.c`. | [2026-03-13_1615_libsn_doxygen.md](./2026-03-13_1615_libsn_doxygen.md) |
 | 2026-03-13 | Micro-Build Strategy and Memcpy | Pioneered object-level iteration bypassing standard `.elf` linkers and achieved a 100% byte-match for `memcpy` by pushing pointer assignment into the GCC size-check delay slot. | [2026-03-13_1640_microbuild_and_memcpy.md](./2026-03-13_1640_microbuild_and_memcpy.md) |
+| 2026-03-13 | libspu 100% Complete via Call Graph Script Fix | Achieved 100% decompilation for `libspu` by realizing `D_8001946C.s` was merely a data label, and updating `generate_call_graph.py` to ignore data and jump table labels correctly. | [2026-03-13_1730_libspu_100_percent.md](./2026-03-13_1730_libspu_100_percent.md) |
