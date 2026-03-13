@@ -3,7 +3,8 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Sound Subsystem Decompilation:** A major breakthrough in decompiling the `system/sound.c` file has occurred. Successfully mapped and perfectly decompiled several core SPU allocation routines (`SoundSpuMemoryAllocateWDS`, `SoundLoadWdsFile`, `SoundElementInit`, `SoundWaitSpuTransfer`, and `SoundPlayDefaultSeds`). Discovered crucial GCC 2.6.0 compiler quirks, such as delay slot pointer hoisting and specific `do-while` syntax required to match Linked List traversals. The `AudioElement` struct black-box arrays have been systematically exploded into explicit parameters.
+- **Phase 4 (Sustained Manual Decompilation)** is active. We are continuing our meticulous work on reversing `system/sound.c`.
+- In our most recent session, we successfully achieved a perfect, byte-for-byte decompilation of `func_8003E290`, correctly identifying its control flow and renaming it to `SoundCalculateEnvelopeStep`. We've continued to uncover and document how PsyQ GCC 2.6.0 handles loops, delays slots, and block branching structure layout.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -21,8 +22,12 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Attempt manual decompilation of small functions (e.g., in `system/` or `psyq/`) to familiarize oneself with PsyQ optimizations and compiler quirks.
 - [x] Update header files (`types.h`, `common.h`) to establish data structures.
 
-### Phase 4: Autonomous Orchestration (Next)
-- [ ] Continue using `find_target.py` iteratively to decompile heavily referenced subsystems.
+### Phase 4: Sustained Manual Decompilation (In Progress)
+- [x] Use `find_target.py` iteratively to systematically identify and decompile heavily referenced subsystems (e.g., `system/sound.c`).
+- [x] Discover and document compiler quirks, memory layout, and branch delay slot nuances for PsyQ GCC 2.6.0/2.7.2.
+- [ ] Continue mapping out and decompiling remaining critical sub-systems requiring manual intervention.
+
+### Phase 5: Autonomous Orchestration (Next)
 - [ ] Draft `scripts/auto_decomp.py` to act as the central AI orchestrator for simpler leaf functions.
 - [ ] Implement the continuous compilation feedback loop (Pick un-matched `.s` -> Prompt AI for `.c` -> Compile -> Evaluate Diff/Fix -> Repeat).
 - [ ] Plumb the feedback loop to automatically log successful compiler tricks and heuristics back into `knowledge_base.json`.
