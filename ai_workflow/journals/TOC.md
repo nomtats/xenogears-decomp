@@ -26,6 +26,12 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 ### Phase 4: Sustained Manual Decompilation (In Progress)
 - [x] Use `generate_call_graph.py` iteratively to systematically identify and decompile heavily referenced subsystems (e.g., `system/sound.c`).
 - [x] Discover and document compiler quirks, memory layout, and branch delay slot nuances for PsyQ GCC 2.6.0/2.7.2.
+- [ ] Achieve 100% decompilation for high-priority, near-complete submodules:
+  - **`libspu`**: 97.7% complete (1 unmatched function: `D_8001946C`, 7 ASM lines).
+  - **`libsn`**: 12.5% complete (7 unmatched, very similar SN systems I/O routines like `PClseek`, `PCopen`, 5-55 ASM lines).
+  - **`libcard`**: 14.3% complete (6 unmatched, tiny functions 6-23 ASM lines).
+  - **`libc`**: 33.3% complete (8 unmatched standard library routines like `memcpy`, `bzero`).
+  - **`system/libarchive`**: 77.8% complete (6 unmatched, larger functions up to 352 ASM lines, but near completion).
 - [ ] Continue mapping out and decompiling remaining critical sub-systems requiring manual intervention.
 
 ### Phase 5: Autonomous Orchestration (Next)
