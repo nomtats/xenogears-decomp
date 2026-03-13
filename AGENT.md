@@ -38,6 +38,7 @@ To ensure you learn as you go, all findings must be stored in persistent memory.
   3. Append any newly created journal entries to the table at the bottom of the file.
 
 ## 4. Directives for the AI Agent
+- **Mandatory Docker Execution**: You are strictly FORBIDDEN from running any build commands (`make`, `pip install`, `python3`, etc.) or modifying the environment directly on the host machine. ALL compilation, repository tools, and environment setups must be executed WITHIN the configured Docker container. Modifying the host environment is dangerous and violates the project's isolation strategy.
 - **Never stop at "it works":** "It matches" is just the condition to trigger the reflection phase. Identifying *how* you made it match is the actual goal.
 - **Start with the Obvious (The Jigsaw Strategy):** When prioritizing decompilation targets, aim for highly referenced leaf functions in boilerplate SDKs or standard libraries (like `psyq` or `libc`) first. Like doing a jigsaw puzzle, you must start with the "corners" and edges even if they are boring; defining these foundational components early automatically clears up massive amounts of abstract register assumptions in the complex, game-specific logic later.
 - **Examine All Available Tools First:** Before downloading third-party software or writing custom brute-force scripts, carefully search the repository (especially `tools/`, `scripts/`, or via `grep_search`) to see if the project authors already built a solution.
