@@ -3,8 +3,8 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Phase 4 (Sustained Manual Decompilation)** is active. We are continuing our meticulous work on reversing `system/sound.c`.
-- In our most recent session, we successfully achieved a perfect, byte-for-byte decompilation of `func_8003E290`, correctly identifying its control flow and renaming it to `SoundCalculateEnvelopeStep`. We've continued to uncover and document how PsyQ GCC 2.6.0 handles loops, delays slots, and block branching structure layout.
+- **Phase 4 (Sustained Manual Decompilation)** is active. We successfully replaced the naive target generation script with `generate_call_graph.py`, leveraging `make clean-build` without `SKIP_ASM=1` to accurately parse `R_MIPS_26` relocations and reveal true caller/callee counts.
+- We have identified `func_8003E5BC` (in `system/sound.c`) as the highest priority target: a true leaf function (0 callees) with 6 callers and a highly manageable 19 lines of assembly. Manual decompilation of this block is our immediate next step.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -23,7 +23,7 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - [x] Update header files (`types.h`, `common.h`) to establish data structures.
 
 ### Phase 4: Sustained Manual Decompilation (In Progress)
-- [x] Use `find_target.py` iteratively to systematically identify and decompile heavily referenced subsystems (e.g., `system/sound.c`).
+- [x] Use `generate_call_graph.py` iteratively to systematically identify and decompile heavily referenced subsystems (e.g., `system/sound.c`).
 - [x] Discover and document compiler quirks, memory layout, and branch delay slot nuances for PsyQ GCC 2.6.0/2.7.2.
 - [ ] Continue mapping out and decompiling remaining critical sub-systems requiring manual intervention.
 
@@ -49,3 +49,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | Data Block Mappings & SEDS Recovery | Discovered fallback default sound data structures by reading `asm/slus_006.64/data` magics and renaming them globally; decompiled SEDS playback recovery function. | [2026-03-13_0055_sound_seds_recovery.md](./2026-03-13_0055_sound_seds_recovery.md) |
 | 2026-03-13 | WDS Allocation and Delay Slots | Resolved GCC 2.6.0 instruction reordering involving MIPS branch delay slots and `do-while` linked-list matching. Exploded `AudioElement` struct black-box parameters recursively via initialization decompilation. | [2026-03-13_0130_sound_wds_allocation_delay_slots.md](./2026-03-13_0130_sound_wds_allocation_delay_slots.md) |
 | 2026-03-13 | Flat Goto Block Manipulation vs GCC | Discovered how to force GCC 2.7.2 to emit explicit true-branches (`bnez`, `beq`) spanning distant blocks, and realized `asm/` is untracked by `git` preventing manual deletions. | [2026-03-13_0140_goto_block_manipulation.md](./2026-03-13_0140_goto_block_manipulation.md) |
+| 2026-03-13 | Static Call Graph Analysis | Removed `find_target.py`, replacing it with `generate_call_graph.py` which tracks R_MIPS_26 relocations and groups stats by subsystem to accurately map "True Leaf" nodes. | [2026-03-13_1215_call_graph_generation.md](./2026-03-13_1215_call_graph_generation.md) |
