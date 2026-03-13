@@ -193,6 +193,17 @@
         "mismatch"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "pattern_example_011",
+      "concept": "Mandatory Doxygen and Assembly Inline Documentation",
+      "description": "Any successfully decompiled/matched C function MUST be immediately documented with a Doxygen block (`/** ... */`) explaining its purpose, parameters, and return type. Furthermore, you must inline comment any odd C logic mapping back to specific assembly quirks (e.g. `// required to match lui/lhu hoisting` or `// handwritten inline assembly for Coprocessor 2 ctc2 instructions`). Never skip the final documentation step.",
+      "tags": [
+        "documentation",
+        "doxygen",
+        "comments"
+      ],
+      "date_added": "2026-03-13"
     }
   ]
 }

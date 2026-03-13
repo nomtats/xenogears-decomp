@@ -3,8 +3,9 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Phase 4 (Sustained Manual Decompilation)** is active. We successfully replaced the naive target generation script with `generate_call_graph.py`, leveraging `make clean-build` without `SKIP_ASM=1` to accurately parse `R_MIPS_26` relocations and reveal true caller/callee counts.
-- We have shifted our target criteria to follow the "Jigsaw Strategy." Our immediate next step is to manually decompile the highly-referenced standard library SDK functions in the `src/slus_006.64/psyq` module (like `SetTransMatrix`, `SetRotMatrix`, or `PCclose`). Clearing these "edges" of the puzzle will massively reduce abstract register guessing in the deeper game logic.
+- **Phase 4 (Sustained Manual Decompilation)** is active. We are executing the "Jigsaw Strategy," starting by decompiling highly-referenced "True Leaf" nodes (functions with 0 callees).
+- We have successfully cleared our first edge targets: `SetTransMatrix`, `SetRotMatrix`, and `PCclose` by matching inline Coprocessor 2 and Exception assembly.
+- Our immediate next steps are to continue solving the top heavily-referenced leaf targets from `ai_workflow/analysis/call_graph_report.md` (e.g. `NormalClip`, `func_8008CF3C`, `memcpy`) to progressively shrink the "unknown" footprint underlying all major systems.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -50,3 +51,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | WDS Allocation and Delay Slots | Resolved GCC 2.6.0 instruction reordering involving MIPS branch delay slots and `do-while` linked-list matching. Exploded `AudioElement` struct black-box parameters recursively via initialization decompilation. | [2026-03-13_0130_sound_wds_allocation_delay_slots.md](./2026-03-13_0130_sound_wds_allocation_delay_slots.md) |
 | 2026-03-13 | Flat Goto Block Manipulation vs GCC | Discovered how to force GCC 2.7.2 to emit explicit true-branches (`bnez`, `beq`) spanning distant blocks, and realized `asm/` is untracked by `git` preventing manual deletions. | [2026-03-13_0140_goto_block_manipulation.md](./2026-03-13_0140_goto_block_manipulation.md) |
 | 2026-03-13 | Static Call Graph Analysis | Removed `find_target.py`, replacing it with `generate_call_graph.py` which tracks R_MIPS_26 relocations and groups stats by subsystem to accurately map "True Leaf" nodes. | [2026-03-13_1215_call_graph_generation.md](./2026-03-13_1215_call_graph_generation.md) |
+| 2026-03-13 | PsyQ SDK Inline Assembly | Decompiled highly referenced SDK functions (`SetRotMatrix`, `SetTransMatrix`, `PCclose`) using MIPS `break` and `__asm__ volatile` coping with maspsx parser issues involving integer bases. | [2026-03-13_1416_psyq_sdk_inline_asm.md](./2026-03-13_1416_psyq_sdk_inline_asm.md) |

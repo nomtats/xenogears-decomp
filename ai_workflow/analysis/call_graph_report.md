@@ -2,9 +2,9 @@
 
 ## 📈 Global Progress
 - **Total Functions:** 1927
-- **Decompiled (Matched):** 671
-- **Remaining (Unmatched):** 1256
-- **Overall Completion:** 34.82%
+- **Decompiled (Matched):** 674
+- **Remaining (Unmatched):** 1253
+- **Overall Completion:** 34.98%
 
 ## 📁 Module Progress
 | Module | Matched | Unmatched | Total | Progress |
@@ -29,8 +29,8 @@
 | `src/slus_006.64/psyq/libcd` | 49 | 0 | 49 | 100.0% |
 | `src/slus_006.64/psyq/libetc` | 25 | 3 | 28 | 89.3% |
 | `src/slus_006.64/psyq/libgpu` | 42 | 24 | 66 | 63.6% |
-| `src/slus_006.64/psyq/libgte` | 0 | 94 | 94 | 0.0% |
-| `src/slus_006.64/psyq/libsn` | 0 | 8 | 8 | 0.0% |
+| `src/slus_006.64/psyq/libgte` | 2 | 92 | 94 | 2.1% |
+| `src/slus_006.64/psyq/libsn` | 1 | 7 | 8 | 12.5% |
 | `src/slus_006.64/psyq/libspu` | 42 | 1 | 43 | 97.7% |
 | `src/slus_006.64/system/animation_scripts` | 4 | 30 | 34 | 11.8% |
 | `src/slus_006.64/system/archive` | 9 | 2 | 11 | 81.8% |
@@ -52,9 +52,6 @@
 The best un-matched targets across the entire codebase, prioritizing 'True Leaf' status, then caller count, then lowest ASM lines.
 | Function | Module | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
-| `SetTransMatrix` | `src/slus_006.64/psyq/libgte` | 26 | 0 | 11 |
-| `SetRotMatrix` | `src/slus_006.64/psyq/libgte` | 26 | 0 | 15 |
-| `PCclose` | `src/slus_006.64/psyq/libsn` | 11 | 0 | 6 |
 | `NormalClip` | `src/slus_006.64/psyq/libgte` | 10 | 0 | 15 |
 | `func_8008CF3C` | `src/field/main/misc` | 10 | 0 | 30 |
 | `CompMatrix` | `src/slus_006.64/psyq/libgte` | 10 | 0 | 91 |
@@ -72,6 +69,9 @@ The best un-matched targets across the entire codebase, prioritizing 'True Leaf'
 | `func_80048C4C` | `src/slus_006.64/psyq/libgte` | 7 | 0 | 42 |
 | `func_800A0C94` | `src/field/main/misc6` | 7 | 0 | 44 |
 | `func_8004A414` | `src/slus_006.64/psyq/libgte` | 6 | 0 | 13 |
+| `func_8003E5BC` | `src/slus_006.64/system/sound` | 6 | 0 | 51 |
+| `PClseek` | `src/slus_006.64/psyq/libsn` | 5 | 0 | 12 |
+| `func_80080968` | `src/field/main/misc4` | 5 | 0 | 29 |
 
 ## 🎯 Top Targets by Module
 Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily referenced.
@@ -107,8 +107,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_8008CF3C` | `misc.c` | 10 | 0 | 30 |
 | `func_8009A514` | `misc.c` | 8 | 0 | 10 |
 | `func_80095124` | `misc.c` | 4 | 0 | 46 |
-| `func_800950A0` | `misc.c` | 3 | 0 | 42 |
 | `func_8009501C` | `misc.c` | 3 | 0 | 42 |
+| `func_800950A0` | `misc.c` | 3 | 0 | 42 |
 | `func_80092424` | `misc.c` | 3 | 0 | 52 |
 | `func_800924D4` | `misc.c` | 3 | 0 | 61 |
 | `func_8008D2E0` | `misc.c` | 2 | 0 | 13 |
@@ -208,12 +208,12 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | :--- | :--- | :--- | :--- | :--- |
 | `ChangeClearPAD` | `libapi.c` | 7 | 0 | 10 |
 | `SysDeqIntRP` | `libapi.c` | 2 | 0 | 6 |
-| `StopPAD2` | `libapi.c` | 1 | 0 | 6 |
 | `StartPAD2` | `libapi.c` | 1 | 0 | 6 |
-| `InitPAD2` | `libapi.c` | 1 | 0 | 6 |
 | `func_80040ABC` | `libapi.c` | 1 | 0 | 6 |
+| `StopPAD2` | `libapi.c` | 1 | 0 | 6 |
 | `WaitEvent` | `WaitEvent.c` | 1 | 0 | 6 |
 | `SysEnqIntRP` | `libapi.c` | 1 | 0 | 6 |
+| `InitPAD2` | `libapi.c` | 1 | 0 | 6 |
 | `func_80040B00` | `libapi.c` | 1 | 0 | 7 |
 | `EnablePAD` | `libapi.c` | 1 | 0 | 7 |
 
@@ -250,8 +250,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
 | `StartCARD2` | `libcard.c` | 1 | 0 | 6 |
-| `StopCARD2` | `libcard.c` | 1 | 0 | 6 |
 | `InitCARD2` | `libcard.c` | 1 | 0 | 6 |
+| `StopCARD2` | `libcard.c` | 1 | 0 | 6 |
 | `_card_info` | `libcard.c` | 0 | 0 | 6 |
 | `InitCARD` | `libcard.c` | 1 | 6 | 23 |
 | `StopCARD` | `libcard.c` | 0 | 3 | 14 |
@@ -280,8 +280,6 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 ### `src/slus_006.64/psyq/libgte`
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
-| `SetTransMatrix` | `libgte.c` | 26 | 0 | 11 |
-| `SetRotMatrix` | `libgte.c` | 26 | 0 | 15 |
 | `NormalClip` | `libgte.c` | 10 | 0 | 15 |
 | `CompMatrix` | `libgte.c` | 10 | 0 | 91 |
 | `SetGeomScreen` | `libgte.c` | 8 | 0 | 7 |
@@ -290,11 +288,12 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `SetGeomOffset` | `libgte.c` | 7 | 0 | 11 |
 | `RotTransPers` | `libgte.c` | 7 | 0 | 15 |
 | `func_80048C4C` | `libgte.c` | 7 | 0 | 42 |
+| `func_8004A414` | `libgte.c` | 6 | 0 | 13 |
+| `MulMatrix2` | `libgte.c` | 5 | 0 | 71 |
 
 ### `src/slus_006.64/psyq/libsn`
 | Function | File | Callers | Callees | ASM Lines |
 | :--- | :--- | :--- | :--- | :--- |
-| `PCclose` | `libsn.c` | 11 | 0 | 6 |
 | `PCopen` | `libsn.c` | 8 | 0 | 11 |
 | `PClseek` | `libsn.c` | 5 | 0 | 12 |
 | `PCinit` | `libsn.c` | 4 | 0 | 5 |
@@ -365,8 +364,8 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_8003E5BC` | `sound.c` | 6 | 0 | 51 |
 | `func_8003F43C` | `sound.c` | 2 | 0 | 13 |
 | `func_8003A838` | `sound.c` | 2 | 0 | 30 |
-| `func_8003A55C` | `sound.c` | 2 | 0 | 33 |
 | `func_8003A344` | `sound.c` | 2 | 0 | 33 |
+| `func_8003A55C` | `sound.c` | 2 | 0 | 33 |
 | `SoundEnableAllSpuChannels` | `sound.c` | 1 | 0 | 26 |
 | `SoundMuteAllSpuChannels` | `sound.c` | 1 | 0 | 27 |
 | `func_8003EEA0` | `sound.c` | 1 | 0 | 29 |
@@ -398,7 +397,7 @@ Unmatched functions prioritized by 'True Leaf' status, then by mostly heavily re
 | `func_800317E0` | `temp2.c` | 1 | 0 | 11 |
 | `func_80030C40` | `temp2.c` | 1 | 0 | 17 |
 | `func_8002CD24` | `temp2.c` | 1 | 0 | 19 |
-| `func_8002CCC8` | `temp2.c` | 1 | 0 | 28 |
+| `func_800301C8` | `temp2.c` | 1 | 0 | 28 |
 
 ### `src/slus_006.64/system/temp3`
 | Function | File | Callers | Callees | ASM Lines |
@@ -449,6 +448,6 @@ Functions called by the most other functions throughout the entire codebase.
 | `Vsync` | 28 | `src/slus_006.64/psyq/libetc/vsync.c` | ✅ |
 | `ArchiveDecodeAlignedSize` | 28 | `src/slus_006.64/system/libarchive.c` | ✅ |
 | `GetTPage` | 28 | `src/slus_006.64/psyq/libgpu.c` | ✅ |
-| `SetRotMatrix` | 26 | `src/slus_006.64/psyq/libgte.c` | ❌ |
-| `SetTransMatrix` | 26 | `src/slus_006.64/psyq/libgte.c` | ❌ |
+| `SetRotMatrix` | 26 | `src/slus_006.64/psyq/libgte.c` | ✅ |
+| `SetTransMatrix` | 26 | `src/slus_006.64/psyq/libgte.c` | ✅ |
 | `LoadImage` | 24 | `src/slus_006.64/psyq/libgpu.c` | ❌ |

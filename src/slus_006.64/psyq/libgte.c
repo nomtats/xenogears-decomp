@@ -1,4 +1,6 @@
 #include "common.h"
+#include <psyq/libgte.h>
+
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", InitGeom);
 
@@ -56,13 +58,61 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", TransMatrix);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", ScaleMatrix);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", SetRotMatrix);
+/**
+ * @brief Sets the 3x3 rotation matrix in the GTE (Geometry Transformation Engine).
+ * 
+ * Transfers the 3x3 rotation matrix (m[3][3] -> 5 halfwords, padded to 5 words)
+ * from the MATRIX structure in main memory into Coprocessor 2 (GTE) control registers.
+ * 
+ * @param m Pointer to the MATRIX structure containing rotation data.
+ */
+void SetRotMatrix(MATRIX *m) {
+    __asm__ volatile (
+        "lw $t0, 0(%0)\n\t"
+        "lw $t1, 4(%0)\n\t"
+        "lw $t2, 8(%0)\n\t"
+        "lw $t3, 12(%0)\n\t"
+        "lw $t4, 16(%0)\n\t"
+        "ctc2 $t0, $0\n\t"
+        "ctc2 $t1, $1\n\t"
+        "ctc2 $t2, $2\n\t"
+        "ctc2 $t3, $3\n\t"
+        "ctc2 $t4, $4"
+        :
+        : "r"(m)
+        : "t0", "t1", "t2", "t3", "t4"
+    );
+}
+
+
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", SetLightMatrix);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", SetColorMatrix);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", SetTransMatrix);
+/**
+ * @brief Sets the 3D translation vector in the GTE (Geometry Transformation Engine).
+ * 
+ * Transfers the translation vector (t[3] -> 3 words) from the MATRIX structure
+ * in main memory into Coprocessor 2 (GTE) control registers $5, $6, and $7
+ * (TRX, TRY, TRZ).
+ * 
+ * @param m Pointer to the MATRIX structure containing translation data.
+ */
+void SetTransMatrix(MATRIX *m) {
+    __asm__ volatile (
+        "lw $t0, 20(%0)\n\t"
+        "lw $t1, 24(%0)\n\t"
+        "lw $t2, 28(%0)\n\t"
+        "ctc2 $t0, $5\n\t"
+        "ctc2 $t1, $6\n\t"
+        "ctc2 $t2, $7"
+        :
+        : "r"(m)
+        : "t0", "t1", "t2"
+    );
+}
+
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgte", SetVertex0);
 

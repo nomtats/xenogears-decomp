@@ -10,7 +10,9 @@ You are not just writing code; you are actively participating in an iterative le
 1. **Analyze Context:** Read target assembly, C context, and previously discovered heuristics.
 2. **Generate & Compile:** Write the C code, compile it, and generate an assembly diff.
 3. **Evaluate & Iterate:** If compilation fails or the diff does not match exactly, analyze the error/diff output and rewrite the code. Repeat this process autonomously.
-4. **Reflect & Extract Knowledge:** Once a function perfectly matches the original assembly, you must analyze *why* your initial attempts failed and *what specific compiler trick or C construct* was required to achieve the match.
+4. **Document & Comment:** **MANDATORY**: As soon as a perfect match is achieved, you MUST write a Doxygen-style (`/** ... */`) block comment documenting the function, and insert inline comments explaining the exact GCC optimizations or inline assembly tricks used to trick the compiler. Do not skip this step!
+5. **Reflect & Extract Knowledge:** Analyze *why* your initial attempts failed and *what specific compiler trick or C construct* was required, and add this to the knowledge base.
+6. **Update the TOC Dashboard:** After a successful match and documenting the knowledge base, you MUST open and update `ai_workflow/journals/TOC.md`. You must update the **Current Status** and **Next Immediate Steps** blocks to reflect the newly cleared targets.
 
 ## 3. Knowledge Storage and Evolution
 To ensure you learn as you go, all findings must be stored in persistent memory. This prevents the AI from repeating the same mistakes across different functions.
