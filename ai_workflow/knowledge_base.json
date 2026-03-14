@@ -272,6 +272,20 @@
         "readability"
       ],
       "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_016",
+      "concept": "Temp Variable Ordering Controls Register Allocation and Evaluation Order in OR Chains",
+      "description": "When GCC 2.7.2 evaluates a multi-operand OR expression like `(b << 16) | ((g << 8) | 0x80000000) | r`, it freely reassociates the OR chain (since OR is commutative+associative), ignoring explicit parentheses. This can cause: (1) wrong register allocation (s0/s1 swapped for variables), and (2) wrong evaluation order (0x80000000 ORed with the wrong operand). The fix is to split the expression into separate assignment statements with explicit temp variables: `bv = b << 16; color = (g << 8) | 0x80000000; return f(bv | color | r);`. This forces GCC to: (a) allocate the first-assigned variable to s0 and the second to s1, and (b) evaluate the statements in declaration order, preventing reassociation across statement boundaries. Discovered during ClearImage2 decompilation where 5 expression variants failed before the temp-variable approach matched byte-for-byte. Note: single temp variables can fix grouping but may produce wrong evaluation order (g-part before b-part); TWO temps are needed when both register allocation AND evaluation order matter.",
+      "tags": [
+        "optimization",
+        "register-allocation",
+        "expression-ordering",
+        "gcc-2.7.2",
+        "OR-chains",
+        "mismatch"
+      ],
+      "date_added": "2026-03-14"
     }
   ]
 }

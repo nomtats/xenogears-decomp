@@ -298,9 +298,39 @@ int DrawSync(int mode) {
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", func_8004463C);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearImage);
+extern char D_80019180; // "ClearImage"
+/**
+ * @brief Fill a VRAM rectangle with a solid color.
+ * @param rect Target rectangle on VRAM
+ * @param r Red component (0-255)
+ * @param g Green component (0-255)
+ * @param b Blue component (0-255)
+ * @return Transfer status
+ */
+int ClearImage(RECT *rect, u_char r, u_char g, u_char b) {
+    func_8004463C(&D_80019180, rect);
+    return g_GpuPkg->dmaTransfer(g_GpuPkg->dmaClearCfg, rect, 8, (b << 16) | (g << 8) | r);
+}
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearImage2);
+/**
+ * @brief Fill a VRAM rectangle with a solid color, setting the STP bit.
+ *
+ * Identical to ClearImage but sets bit 31 (semi-transparency processing)
+ * on every written pixel.
+ *
+ * @param rect Target rectangle on VRAM
+ * @param r Red component (0-255)
+ * @param g Green component (0-255)
+ * @param b Blue component (0-255)
+ * @return Transfer status
+ */
+int ClearImage2(RECT *rect, u_char r, u_char g, u_char b) {
+    int bv, color;
+    func_8004463C(&D_80019180, rect);
+    bv = b << 16;
+    color = (g << 8) | 0x80000000;
+    return g_GpuPkg->dmaTransfer(g_GpuPkg->dmaClearCfg, rect, 8, bv | color | r);
+}
 
 extern char D_8001918C; // "LoadImage"
 /**

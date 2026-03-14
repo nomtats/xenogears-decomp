@@ -17,11 +17,12 @@ It is a living document. When a milestone is completed, a new gap is identified,
 - **Persistent memory triad**: The Knowledge Base (`knowledge_base.json`), Journals (`journals/`), and TOC Dashboard (`journals/TOC.md`) successfully preserve context across sessions. No critical discovery has been lost.
 - **Micro-Build iteration loop**: Compiling individual `.o` files via `make build/src/.../file.c.o` reduces feedback to milliseconds, enabling rapid trial-and-error without linker interference.
 - **Jigsaw Strategy + Call Graph targeting**: `generate_call_graph.py` provides data-driven target selection by reference count and module clustering, validated by the `libspu` 100% completion.
-- **Rich compiler trick catalog**: 13 KB patterns covering delay slots, goto manipulation, register forcing, linked list idioms, and more — all battle-tested against real functions.
+- **Rich compiler trick catalog**: 16 KB patterns covering delay slots, goto manipulation, register forcing, OR-chain control, linked list idioms, and more — all battle-tested against real functions.
 - **Iterative human-AI readability review**: The GpuPackage struct (2026-03-14) was refined across 3 passes — basic names → descriptive names + docs → typed signatures + Doxygen — each triggered by human design review. The AI handles mechanical work (grep, rename, verify); the human drives design taste. This produced higher-quality code than either could alone.
 
 ### What's Missing
-- **Knowledge is write-only.** Patterns are appended to the KB but there's no structured retrieval procedure. An agent must read all 13 entries and intuit which apply.
+- **Knowledge is write-only.** Patterns are appended to the KB but there's no structured retrieval procedure. An agent must read all 16 entries and intuit which apply.
+- **No mismatch-to-fix mapping.** Most iteration time is spent *after* the first attempt, diagnosing *why* the output doesn't match and choosing a fix. The ClearImage2 session (2026-03-14) burned 4 of 5 iterations at this stage — the agent could see "s0/s1 swapped, constant ORed with wrong operand" but had no structured path from symptom to solution. Pattern_003 (register asm) was tried and failed for a new reason before pattern_016 (temp variable ordering) was discovered. A "mismatch symptom → fix" lookup would have saved most of that time.
 - **No pre-analysis classification.** Target selection relies on reference count and line count, but not structural signatures (spin loops, GTE routines, SN wrappers). Agents discover unmatchable functions only after wasting time on them.
 - **The feedback loop isn't closed.** Outcome data (attempts, iterations, failure modes, winning patterns) is buried in journal prose, not structured records. There's no way to statistically analyze what works.
 - **Skills directory is underutilized.** Only one skill exists (Docker setup). The core decompilation loop, symbol renaming, post-match reflection, and pattern classification are all manual, undocumented procedures.
@@ -38,8 +39,13 @@ It is a living document. When a milestone is completed, a new gap is identified,
 
 - [ ] **Pattern Decision Tree Skill** (`ai_workflow/skills/pattern_classifier/SKILL.md`)
   - Extract the implicit flowchart from journals into a formal, versioned decision tree.
-  - Input: assembly characteristics (instruction types, branch polarity, delay slot usage, loop structure).
-  - Output: ranked list of applicable KB patterns with confidence indicators.
+  - **Two layers** — both are needed to minimize wasted iterations:
+    1. **Pre-attempt classification** — Input: assembly characteristics (instruction types, branch polarity, delay slot usage, loop structure). Output: ranked list of applicable KB patterns with confidence indicators.
+    2. **Mismatch diagnosis** — Input: specific objdiff symptom (wrong register, wrong branch polarity, constant merged with wrong operand, extra/missing instruction). Output: ranked fix strategies with known failure modes.
+  - Example mismatch→fix entries (from real sessions):
+    - "s0/s1 register allocation swapped" → try `register asm()` forcing (KB pattern_003); if GCC copies to caller-saved accumulator instead, fall back to temp-variable ordering (KB pattern_016).
+    - "OR constant merged with wrong operand" → GCC reassociates OR chains freely; split into separate assignment statements via temp variables (KB pattern_016).
+    - "beqz instead of bnez (wrong branch polarity)" → use flat goto structure (KB pattern_010).
   - Must be updated whenever a new pattern is added to the KB.
 
 - [ ] **Structured Outcome Records** (`ai_workflow/outcome_log.jsonl`)
@@ -183,3 +189,4 @@ It is a living document. When a milestone is completed, a new gap is identified,
 | 2026-03-13 | Initial creation | Formalized workflow evolution plan from comprehensive review of journals, KB, and meta-workflow gaps. Established 5-tier improvement roadmap with measurable success criteria. |
 | 2026-03-14 | Tier 1: Added readability pass + symbol rename skill | GpuPackage struct session revealed that readability refactoring is a distinct high-value workflow phase not captured in the post-match checklist. Added step 6 to reflection template, new Symbol Rename & Struct Recovery skill item, and identified the missing "readability checkpoint" gap in the maturity assessment. |
 | 2026-03-14 | Expanded struct recovery skill + human-AI insight | Three iterative refinement passes on GpuPackage proved that readability benefits from human-AI dialogue. Expanded Symbol Rename skill with quality ladder (named → descriptive → typed → documented), typed-vs-polymorphic analysis step, and noted that autonomous readability passes may need human-in-the-loop for design taste. |
+| 2026-03-14 | Tier 1: Added mismatch diagnosis layer to Pattern Decision Tree | ClearImage2 session (5 iterations, 4 wasted) proved that the biggest time sink is post-attempt mismatch diagnosis, not pre-attempt classification. Added two-layer decision tree spec (pre-attempt + mismatch diagnosis) with concrete symptom→fix examples. Added "no mismatch-to-fix mapping" to the gaps assessment. Updated KB pattern count to 16. |
