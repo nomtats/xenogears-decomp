@@ -64,29 +64,86 @@
  *		 color	CLUT	CLUT	DIRECT
  */
 
-/*
- * GPU Driver Package (vtable)
+/**
+ * GPU Driver Package (vtable + DMA configs)
  *
- * Initialized by ResetGraph(). All GPU operations dispatch through
- * this table, allowing different driver implementations to be swapped.
+ * Initialized by ResetGraph(). All GPU operations dispatch through this
+ * table. It bundles function pointers with pre-baked DMA channel configs
+ * so callers don't configure DMA from scratch — they pull a config value
+ * from this struct and pass it as the first arg to dmaTransfer().
+ *
+ * Function pointers with fixed signatures have typed parameters.
+ * dmaTransfer uses K&R () (unspecified args) because different callers
+ * pass different types for the same positional argument.
  */
 typedef struct GpuPackage {
     /* 0x00 */ u_long unk_00;
     /* 0x04 */ u_long unk_04;
-    /* 0x08 */ int  (*transfer)();
-    /* 0x0C */ u_long clearParam;
-    /* 0x10 */ void (*command)();
-    /* 0x14 */ void (*sendData)();
-    /* 0x18 */ u_long otagParam;
-    /* 0x1C */ u_long storeParam;
-    /* 0x20 */ u_long loadParam;
+    /**
+     * @brief Initiate a GPU DMA transfer.
+     *
+     * Polymorphic — the first arg selects the DMA channel config and the
+     * remaining args vary by operation. Uses K&R () because callers pass
+     * different types. Known call signatures:
+     *
+     *   LoadImage:   dmaTransfer(dmaLoadCfg,  RECT *rect, 8, u_long *src)
+     *   StoreImage:  dmaTransfer(dmaStoreCfg,  RECT *rect, 8, u_long *dst)
+     *   ClearImage:  dmaTransfer(dmaClearCfg,  RECT *rect, 8, u_long color)
+     *   DrawOTag:    dmaTransfer(dmaOTagCfg,   u_long *ot, 0, 0)
+     *   MoveImage:   dmaTransfer(dmaOTagCfg+N, RECT *src,  0x14, 0)
+     *
+     * @param cfg   DMA channel config (one of the dmaCfg members below)
+     * @param addr  Target RECT or ordering table pointer
+     * @param mode  Transfer mode flag
+     * @param data  Source/dest buffer, fill color, or 0
+     * @return Transfer status
+     */
+    /* 0x08 */ int  (*dmaTransfer)();
+    /** DMA config for ClearImage/ClearImage2 (VRAM fill). */
+    /* 0x0C */ u_long dmaClearCfg;
+    /**
+     * @brief Send a single 32-bit command word to the GPU GP1 port.
+     * @param cmd GP1 command word (display control, reset, etc.)
+     */
+    /* 0x10 */ void (*sendGP1)(u_long cmd);
+    /**
+     * @brief Send raw primitive data words to the GPU GP0 port.
+     * @param data Pointer to primitive payload (tag stripped)
+     * @param len  Number of 32-bit words to send
+     */
+    /* 0x14 */ void (*sendGP0)(void *data, int len);
+    /** DMA config for DrawOTag / DrawOTagEnv / MoveImage. */
+    /* 0x18 */ u_long dmaOTagCfg;
+    /** DMA config for StoreImage (VRAM → main RAM). */
+    /* 0x1C */ u_long dmaStoreCfg;
+    /** DMA config for LoadImage (main RAM → VRAM). */
+    /* 0x20 */ u_long dmaLoadCfg;
     /* 0x24 */ u_long unk_24;
     /* 0x28 */ u_long unk_28;
-    /* 0x2C */ void (*clearOTagR)();
+    /**
+     * @brief Reverse-fill an ordering table via DMA.
+     *
+     * Hardware-accelerated: the GPU DMA controller writes the linked
+     * list in reverse order so the OT can be traversed front-to-back.
+     *
+     * @param ot Pointer to the ordering table
+     * @param n  Number of entries in the table
+     */
+    /* 0x2C */ void (*clearOTagR)(u_long *ot, int n);
     /* 0x30 */ u_long unk_30;
-    /* 0x34 */ int  (*reset)();
+    /**
+     * @brief Reset and reinitialize the GPU driver subsystem.
+     * @param mode Reset mode (1 = full reset)
+     * @return Previous GPU mode
+     */
+    /* 0x34 */ int  (*gpuReset)(int mode);
     /* 0x38 */ u_long unk_38;
-    /* 0x3C */ int  (*drawSync)();
+    /**
+     * @brief Wait for all GPU drawing to finish, or poll queue status.
+     * @param mode 0 = block until idle, non-zero = return immediately
+     * @return Number of commands remaining in the GPU queue
+     */
+    /* 0x3C */ int  (*drawSync)(int mode);
 } GpuPackage;
 
 /*

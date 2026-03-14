@@ -311,7 +311,7 @@ extern char D_8001918C; // "LoadImage"
  */
 int LoadImage(RECT *rect, u_long *p) {
     func_8004463C(&D_8001918C, rect);
-    return g_GpuPkg->transfer(g_GpuPkg->loadParam, rect, 8, p);
+    return g_GpuPkg->dmaTransfer(g_GpuPkg->dmaLoadCfg, rect, 8, p);
 }
 
 extern char D_80019198; // "StoreImage"
@@ -323,7 +323,7 @@ extern char D_80019198; // "StoreImage"
  */
 int StoreImage(RECT *rect, u_long *p) {
     func_8004463C(&D_80019198, rect);
-    return g_GpuPkg->transfer(g_GpuPkg->storeParam, rect, 8, p);
+    return g_GpuPkg->dmaTransfer(g_GpuPkg->dmaStoreCfg, rect, 8, p);
 }
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", MoveImage);
@@ -341,7 +341,7 @@ void DrawPrim(void *p) {
 
     len = ((u_char *)p)[3];
     g_GpuPkg->drawSync(0);
-    g_GpuPkg->sendData((u_char *)p + 4, len);
+    g_GpuPkg->sendGP0((u_char *)p + 4, len);
 }
 
 extern char D_800191E0; // "DrawOTag(%08x)...\n"
@@ -353,7 +353,7 @@ void DrawOTag(u_long *p) {
     if (g_GraphDebugLevel >= 2)
         g_GpuPrintf(&D_800191E0, p);
 
-    g_GpuPkg->transfer(g_GpuPkg->otagParam, p, 0, 0);
+    g_GpuPkg->dmaTransfer(g_GpuPkg->dmaOTagCfg, p, 0, 0);
 }
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", PutDrawEnv);
