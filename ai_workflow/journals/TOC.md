@@ -14,10 +14,11 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 
 ### Immediate Next Steps
 
-1. **Decompile MoveImage** — pre-analyzed in the ClearImage2 journal, uses vtable pattern + goto + static buffer copy. Use this as the first live test of the Post-Match Reflection skill (all 6 steps).
-2. **Decompile 1-2 trivial functions** — `func_8004076C`/`func_8004077C` (libapi getter/setter, 4 instructions each) to test the batch-match shortcut in the reflection skill.
-3. **Build the Pattern Decision Tree** (`ai_workflow/skills/pattern_classifier/SKILL.md`) — the last Tier 1 item. Two layers: pre-attempt classification (assembly → pattern) and mismatch diagnosis (objdiff symptom → fix). Use the 16 KB patterns + 47 outcome records as source data.
-4. After Tier 1 is closed, evaluate whether to push into Tier 2 (assembly classifier + function registry) or do a larger decompilation sprint on libgpu/libc.
+1. **Continue MoveImage iteration** — 13 attempts completed, stuck on a register allocation conflict (bnez requires merge point → forces a2; v0 requires no merge → gives beqz). Unexplored directions: temp variable ordering (pattern_016), expression decomposition (`(u16)y << 16`), store reordering, loading g_GpuPkg earlier. See [journal](./2026-03-14_2300_moveimage_investigation.md) for full analysis. If still stuck after a few more attempts, revert to INCLUDE_ASM.
+2. **Alternatively, try simpler libgpu functions first** — `SetDrawMove` is a leaf function with similar bnez pattern but no function call pressure. Could match easily and inform MoveImage.
+3. **Decompile 1-2 trivial functions** — `func_8004076C`/`func_8004077C` (libapi getter/setter, 4 instructions each) to test the batch-match shortcut in the reflection skill.
+4. **Build the Pattern Decision Tree** (`ai_workflow/skills/pattern_classifier/SKILL.md`) — the last Tier 1 item.
+5. After Tier 1 is closed, evaluate whether to push into Tier 2 or do a larger decompilation sprint.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -79,3 +80,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-14 | GPU Vtable Dispatch — 5 Matched | Decompiled DrawSync, LoadImage, StoreImage, DrawOTag, DrawPrim using the g_GpuPkg vtable dispatch pattern. All matched byte-for-byte. New KB pattern_example_015 added. | [2026-03-14_1400_gpu_vtable_dispatch.md](./2026-03-14_1400_gpu_vtable_dispatch.md) |
 | 2026-03-14 | GpuPackage Struct & Symbol Rename | Defined GpuPackage struct for the GPU driver vtable. Renamed D_800568C8 → g_GpuPkg across 19 asm files + C source. K&R function pointers eliminate casts. Full byte-match confirmed. | [2026-03-14_1600_gpu_package_struct.md](./2026-03-14_1600_gpu_package_struct.md) |
 | 2026-03-14 | ClearImage/ClearImage2 Match + OR Chain Technique | Matched ClearImage (1st attempt) and ClearImage2 (5 iterations). Discovered temp-variable-ordering technique to control GCC register allocation + eval order in OR chains. New KB pattern_example_016. MoveImage analysis deferred. | [2026-03-14_2100_clearimage_pair_match.md](./2026-03-14_2100_clearimage_pair_match.md) |
+| 2026-03-14 | MoveImage Deep Investigation (13 attempts) | Identified fundamental register allocation conflict: bnez requires merge point (→ a2), v0 requires no merge (→ beqz), register asm breaks width check. Researched SOTN decomp, SetDrawMove pattern. Still in progress. | [2026-03-14_2300_moveimage_investigation.md](./2026-03-14_2300_moveimage_investigation.md) |
