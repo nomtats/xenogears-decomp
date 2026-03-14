@@ -48,12 +48,13 @@ It is a living document. When a milestone is completed, a new gap is identified,
     - "beqz instead of bnez (wrong branch polarity)" → use flat goto structure (KB pattern_010).
   - Must be updated whenever a new pattern is added to the KB.
 
-- [ ] **Structured Outcome Records** (`ai_workflow/outcome_log.jsonl`)
+- [x] **Structured Outcome Records** (`ai_workflow/outcome_log.jsonl`)
   - Every decompilation attempt (success or failure) produces a machine-readable entry: function name, module, ASM line count, number of attempts, first approach, failure mode, winning patterns, iteration count, difficulty rating.
   - Append-only JSONL format for easy parsing.
   - Enables statistical analysis of pattern effectiveness and difficulty prediction.
+  - **Bootstrapped** with ~45 retroactive entries from journals (22 matched functions, 1 failed, 17 unmatchable BIOS wrappers + setjmp/longjmp).
 
-- [ ] **Post-Match Reflection Template** (`ai_workflow/skills/post_match_reflection/SKILL.md`)
+- [x] **Post-Match Reflection Template** (`ai_workflow/skills/post_match_reflection/SKILL.md`)
   - A mandatory checklist executed after every successful byte-match:
     1. Write Doxygen documentation on the matched function.
     2. Attempt goto reduction (can structured C produce the same output?).
@@ -62,6 +63,7 @@ It is a living document. When a milestone is completed, a new gap is identified,
     5. Update `journals/TOC.md` status and next steps.
     6. **Readability check:** Are there cryptic `D_`/`func_` symbols that now have enough context to rename? Can raw pointer arithmetic be replaced with a struct definition? Flag candidates for a readability pass.
   - Prevents the most commonly skipped steps (documentation, KB updates, reflection).
+  - **Also covers failure path** (3 steps for abandoned/unmatchable functions) and **batch match shortcut** (full reflection on first, abbreviated for siblings).
 
 - [x] **Symbol Rename & Struct Recovery Skill** (`ai_workflow/skills/symbol_rename/SKILL.md`)
   - Documented procedure for the global rename workflow:
@@ -190,3 +192,4 @@ It is a living document. When a milestone is completed, a new gap is identified,
 | 2026-03-14 | Tier 1: Added readability pass + symbol rename skill | GpuPackage struct session revealed that readability refactoring is a distinct high-value workflow phase not captured in the post-match checklist. Added step 6 to reflection template, new Symbol Rename & Struct Recovery skill item, and identified the missing "readability checkpoint" gap in the maturity assessment. |
 | 2026-03-14 | Expanded struct recovery skill + human-AI insight | Three iterative refinement passes on GpuPackage proved that readability benefits from human-AI dialogue. Expanded Symbol Rename skill with quality ladder (named → descriptive → typed → documented), typed-vs-polymorphic analysis step, and noted that autonomous readability passes may need human-in-the-loop for design taste. |
 | 2026-03-14 | Tier 1: Added mismatch diagnosis layer to Pattern Decision Tree | ClearImage2 session (5 iterations, 4 wasted) proved that the biggest time sink is post-attempt mismatch diagnosis, not pre-attempt classification. Added two-layer decision tree spec (pre-attempt + mismatch diagnosis) with concrete symptom→fix examples. Added "no mismatch-to-fix mapping" to the gaps assessment. Updated KB pattern count to 16. |
+| 2026-03-14 | Tier 1: Completed Post-Match Reflection + Outcome Records | Created post_match_reflection skill (6-step success path, 3-step failure path, batch shortcut). Created outcome_log.jsonl with ~45 retroactive entries from all journals. Updated AGENT.md to point to skill (replaces old steps 4–6). 3 of 4 Tier 1 items now complete. |
