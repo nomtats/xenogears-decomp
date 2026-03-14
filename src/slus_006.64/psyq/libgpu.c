@@ -220,7 +220,29 @@ void SetDrawTPage(DR_TPAGE *p, int dfe, int dtd, int tpage) {
     ((u_long *)(p))[1] = _get_mode(dfe, dtd, tpage);
 }
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", SetDrawMove);
+void SetDrawMove(DR_MOVE *p, RECT *rect, int x, int y) {
+    register DR_MOVE *t0 asm("t0") = p;
+    register int len asm("a0") = 5;
+    
+    if (rect->w == 0) {
+        goto set_zero;
+    }
+    
+    if (rect->h != 0) {
+        goto set_codes;
+    }
+
+set_zero:
+    len = 0;
+
+set_codes:
+    t0->code[0] = 0x01000000;
+    t0->code[1] = 0x80000000;
+    setlen(t0, len);
+    t0->code[2] = *(u_long *)&rect->x;
+    t0->code[3] = (y << 16) | (x & 0xFFFF);
+    t0->code[4] = *(u_long *)&rect->w;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", func_80043EAC);
 
@@ -244,9 +266,36 @@ void DumpDispEnv(DISPENV *env) {
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ResetGraph);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", SetGraphReverse);
+extern char D_800190D8[]; // "SetGraphDebug:level..."
+extern char D_800190C0[]; // "SetGraphReverse(%d)...\n"
+extern char D_800568D0;
+extern char D_800568D3;
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", SetGraphDebug);
+int SetGraphReverse(int mode) {
+    char *pD800568D3 = &D_800568D3;
+    int old = *pD800568D3;
+    if (g_GraphDebugLevel >= 2) {
+        g_GpuPrintf(D_800190C0, mode);
+    }
+    *pD800568D3 = mode;
+    g_GpuPkg->sendGP1(
+        ((int (*)(int))g_GpuPkg->unk_28)(8) | (*pD800568D3 ? 0x08000080 : 0x08000000)
+    );
+    if (D_800568D0 == 2) {
+        g_GpuPkg->sendGP1(D_800568D3 ? 0x20000501 : 0x20000504);
+    }
+    return old;
+}
+
+int SetGraphDebug(int level) {
+    char *debugLvl = &g_GraphDebugLevel;
+    int old = *debugLvl;
+    *debugLvl = level;
+    if ((level & 0xFF) != 0) {
+        g_GpuPrintf(D_800190D8, level & 0xFF, D_800568D0, D_800568D3);
+    }
+    return old;
+}
 /*
 int SetGraphDebug(int level) {
     int nPrev = g_GraphDebugLevel;
@@ -482,9 +531,40 @@ void DrawOTag(u_long *p) {
     g_GpuPkg->dmaTransfer(g_GpuPkg->dmaOTagCfg, p, 0, 0);
 }
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", PutDrawEnv);
+extern char D_800191F4[]; // "PutDrawEnv(%08x)...\n"
+extern char D_8001920C[]; // "DrawOTagEnv(%08x,&08x)...\n"
+extern void func_8004574C(DR_ENV *dr_env, DRAWENV *env); // SetDrawEnv
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", DrawOTagEnv);
+// @brief Uploads a drawing environment to the GPU and registers it internally.
+// @param env Pointer to drawing environment
+// @return Pointer to the provided drawing environment
+DRAWENV *PutDrawEnv(DRAWENV *env) {
+    char *debugLvl = &g_GraphDebugLevel;
+    if (*debugLvl >= 2) {
+        g_GpuPrintf(D_800191F4, env);
+    }
+    
+    func_8004574C(&env->dr_env, env);
+    setaddr(&env->dr_env, 0xFFFFFF);
+    g_GpuPkg->dmaTransfer(g_GpuPkg->dmaOTagCfg, &env->dr_env, 0x40, 0);
+    ((DRAWENV*)(debugLvl + 14))[0] = *env;
+    return env;
+}
+
+// @brief Attaches a drawing environment to a specific node in an ordering table.
+// @param ot Pointer to ordering table node 
+// @param env Pointer to drawing environment
+void DrawOTagEnv(u_long *ot, DRAWENV *env) {
+    char *debugLvl = &g_GraphDebugLevel;
+    if (*debugLvl >= 2) {
+        g_GpuPrintf(D_8001920C, ot, env);
+    }
+    
+    func_8004574C(&env->dr_env, env);
+    setaddr(&env->dr_env, (u_long)ot & 0xFFFFFF);
+    g_GpuPkg->dmaTransfer(g_GpuPkg->dmaOTagCfg, &env->dr_env, 0x40, 0);
+    ((DRAWENV*)(debugLvl + 14))[0] = *env;
+}
 
 DRAWENV* GetDrawEnv(DRAWENV* env) {
     memcpy(env, &g_GpuDrawEnv, sizeof(DRAWENV));
