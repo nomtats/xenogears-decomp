@@ -301,6 +301,62 @@
         "gcc-2.7.2"
       ],
       "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_018",
+      "concept": "Inline Asm for Load Delay Slot Scheduling Control",
+      "description": "When GCC and the original compiler disagree on which instruction to place in a MIPS-I load delay slot, no C-level technique can fix it. GCC prefers to fill delay slots with independent loads (to hide latency), while the original compiler sometimes chose simpler instructions like `move a3, zero`. The fix: (1) declare `register int argN asm(\"$R\")` for the affected argument registers, (2) use `__asm__(\"move $7, $0\")` or `__asm__(\"addiu $6, $0, 0x14\")` to emit the exact instruction at the exact position, (3) pass the pinned register variables to the function call so GCC doesn't generate conflicting argument setup. This is a last-resort technique — only use after structured C, register pinning, and barriers have been exhausted. Discovered during MoveImage: after 25+ attempts, the final 4/49 mismatched instructions were a delay slot scheduling preference. Two explicit inline asm instructions (`addiu` for a2, `move` for a3) plus one empty barrier achieved 49/49.",
+      "tags": [
+        "inline-asm",
+        "scheduling",
+        "delay-slot",
+        "register-pinning",
+        "last-resort",
+        "gcc-2.7.2"
+      ],
+      "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_019",
+      "concept": "Asm Barrier Dosage: One Helps, Two Can Hurt",
+      "description": "Empty `__asm__(\"\")` barriers split GCC's scheduling blocks. Within each block, GCC freely reorders instructions; across barriers, it cannot. One well-placed barrier can dramatically improve matching by preventing unwanted hoisting (e.g., 39/49 → 45/49 in MoveImage). However, adding a second barrier can make things WORSE (45/49 → 40/49) because it over-fragments scheduling, preventing GCC from interleaving call argument setup (constant loads like `li a2, 0x14` and `move a3, zero`) with store sequences. The arguments get pushed entirely after the barrier, shifting the whole section. Rule: use the minimum number of barriers needed. After placing one, test before adding another. If matching regresses, remove the extra barrier.",
+      "tags": [
+        "asm-barrier",
+        "scheduling",
+        "optimization",
+        "anti-pattern",
+        "gcc-2.7.2"
+      ],
+      "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_020",
+      "concept": "Scheduling Mismatch Escalation Ladder",
+      "description": "When the target and generated assembly differ in instruction scheduling, apply fixes in escalating order of invasiveness: (1) Start with clean structured C (if/else, no goto) — solves control flow and block layout. (2) Add `register var asm(\"$N\")` pinning for return values and key pointers — solves register allocation. (3) Add ONE `__asm__(\"\")` barrier to split scheduling blocks — prevents unwanted hoisting/sinking. (4) Only as last resort: use explicit `__asm__(\"instruction\")` with register-pinned variables for the exact instructions GCC won't place correctly. Never skip steps — each level solves a category of mismatches, and jumping to inline asm prematurely makes code harder to maintain and debug. MoveImage required all 4 levels across 25+ attempts to achieve 49/49.",
+      "tags": [
+        "methodology",
+        "scheduling",
+        "escalation",
+        "best-practice",
+        "gcc-2.7.2"
+      ],
+      "date_added": "2026-03-14"
+    },
+    {
+      "id": "anti_pattern_003",
+      "concept": "Failure Lessons from MoveImage (25+ Attempts)",
+      "description": "Catalog of failed approaches and what they teach: (1) GOTO MERGE CONFLICTS: Using goto to force bnez creates merge points where GCC reconciles registers from different paths, picking worse registers (a2 instead of v0). Avoid goto when if/else can produce the same branch polarity. (2) GLOBAL REGISTER PINNING BACKFIRE: Pinning `dest` to v0 globally constrained ALL operations on dest, breaking the width check where GCC needed v0 as scratch. Pin narrowly, not globally. (3) OPTIMIZER DEFEATS TEMP VARS: At -O3, GCC sees through temporary variables and eliminates them. Barriers anchored to temp vars have nothing to anchor to. Only real, non-eliminable work survives across barriers. (4) TYPE SIGNEDNESS = INSTRUCTION: Accessing rect->h via u16* gives `lhu`; via short gives `lh`. One wrong cast = one wrong instruction. Always verify lh vs lhu in the target. (5) DIFFERENT COMPILER ≠ CLOSER: CDK GCC 2.7.2 produced completely different register allocation and addressing — a different universe, not a shortcut. Stick with the project's exact compiler build. (6) DELAY SLOT SCHEDULING IS THE FINAL BOSS: After solving control flow and register allocation, the remaining mismatches are pure scheduling heuristic differences. No C-level trick can control which instruction fills a load delay slot. Only inline asm works here.",
+      "tags": [
+        "anti-pattern",
+        "failure-analysis",
+        "goto",
+        "register-pinning",
+        "scheduling",
+        "delay-slot",
+        "gcc-2.7.2",
+        "methodology"
+      ],
+      "date_added": "2026-03-14"
     }
   ]
 }

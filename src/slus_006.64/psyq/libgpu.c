@@ -356,7 +356,63 @@ int StoreImage(RECT *rect, u_long *p) {
     return g_GpuPkg->dmaTransfer(g_GpuPkg->dmaStoreCfg, rect, 8, p);
 }
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", MoveImage);
+extern char D_800191A4; // "MoveImage"
+extern u_long D_80056980;
+extern u_long D_80056984;
+extern u_long D_80056988;
+/**
+ * @brief Transfer a VRAM rectangle to a new position via GPU DMA.
+ * @param rect Source rectangle in VRAM
+ * @param x Destination X coordinate
+ * @param y Destination Y coordinate
+ * @return Transfer status, or -1 if rect has zero width or height
+ */
+int MoveImage(RECT *rect, int x, int y) {
+    register int dest asm("$2");
+    u_long *buf;
+
+    func_8004463C(&D_800191A4, rect);
+
+    dest = rect->w;
+    if (dest == 0) return -1;
+
+    dest = rect->h;
+    if (dest) {
+        dest = y << 16;
+        dest |= (x & 0xFFFF);
+        buf = &D_80056980;
+        /*
+         * Equivalent C (without scheduling workarounds):
+         *
+         *   D_80056984 = dest;
+         *   *buf = *(u_long *)rect;
+         *   dest = *((u_long *)rect + 1);
+         *   D_80056988 = dest;
+         *   dest = g_GpuPkg->dmaTransfer(g_GpuPkg->dmaOTagCfg, buf - 2, 0x14, 0);
+         *
+         * Inline asm is used to pin the 3rd/4th args and control instruction
+         * scheduling so GCC fills load delay slots the same way as the original
+         * compiler. Without this, GCC hoists the dmaOTagCfg load into a delay
+         * slot where the original placed `move a3, zero`.
+         */
+        {
+            u_long rectData = *(u_long *)rect;
+            register GpuPackage *pkg asm("$3") = g_GpuPkg;
+            register int a2 asm("$6");
+            register int a3 asm("$7");
+            __asm__("addiu $6, $0, 0x14");
+            D_80056984 = dest;
+            *buf = rectData;
+            dest = *((u_long *)rect + 1);
+            __asm__("move $7, $0");
+            D_80056988 = dest;
+            __asm__("");
+            dest = pkg->dmaTransfer(pkg->dmaOTagCfg, buf - 2, a2, a3);
+        }
+        return dest;
+    }
+    return -1;
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearOTag);
 
