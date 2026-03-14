@@ -50,4 +50,9 @@ To ensure you learn as you go, all findings must be stored in persistent memory.
 - **Update this very document:** If you discover that your meta-workflow is inefficient or missing a crucial step, you are authorized and encouraged to propose updates to `AGENT.md`.
 
 ## 5. Getting Started
-Whenever a new agent instance is spun up to work on this repository, it MUST read this file first to understand its purpose. It should then check the `ai_workflow/` directory for the latest knowledge and skills before interacting with the codebase.
+Whenever a new agent instance is spun up to work on this repository, it MUST read this file first to understand its purpose. It should then:
+1. Check `ai_workflow/ROADMAP.md` for the current workflow evolution plan and open improvement tasks.
+2. Check `ai_workflow/journals/TOC.md` for recent session history and the immediate next steps.
+3. Review `ai_workflow/knowledge_base.json` and `ai_workflow/skills/` for accumulated patterns and reusable procedures.
+
+If you complete a workflow improvement milestone during your session, update the roadmap accordingly. The workflow's evolution is as important as the decompilation output.
