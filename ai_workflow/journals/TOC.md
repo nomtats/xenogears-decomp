@@ -10,6 +10,14 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 - **libspu is 100% complete.** `libcd`, `libc2`, `controller`, `font`, `heap_debug`, `kernel_menu`, `memory` are also at 100%.
 - **BIOS tail-call wrappers classified as permanently unmatchable.** 17 functions across libapi/libapi_2/libapi_3/libcard are 3-instruction kernel trampolines that cannot be expressed in C (no `naked` attribute in GCC 2.7.2 MIPS). Added as anti-pattern to KB.
 - **Remaining libgpu INCLUDE_ASM stubs**: 16 functions still unmatched (MoveImage, ClearOTag, ClearOTagR, PutDrawEnv, DrawOTagEnv, PutDispEnv, SetDispMask, ResetGraph, SetGraphDebug, SetGraphReverse, SetDrawMove, func_8004463C, func_8004440C, func_800444B8, func_80043EAC, func_80043F18). MoveImage is next — assembly is fully analyzed, uses the vtable pattern + goto for branch polarity + static buffer copy.
+- **Workflow: Tier 1 is 3/4 complete** (2026-03-14): Post-Match Reflection skill and Structured Outcome Records both created and committed. Outcome log bootstrapped with 47 retroactive entries. AGENT.md updated to point to the reflection skill. Only the **Pattern Decision Tree** remains in Tier 1.
+
+### Immediate Next Steps
+
+1. **Decompile MoveImage** — pre-analyzed in the ClearImage2 journal, uses vtable pattern + goto + static buffer copy. Use this as the first live test of the Post-Match Reflection skill (all 6 steps).
+2. **Decompile 1-2 trivial functions** — `func_8004076C`/`func_8004077C` (libapi getter/setter, 4 instructions each) to test the batch-match shortcut in the reflection skill.
+3. **Build the Pattern Decision Tree** (`ai_workflow/skills/pattern_classifier/SKILL.md`) — the last Tier 1 item. Two layers: pre-attempt classification (assembly → pattern) and mismatch diagnosis (objdiff symptom → fix). Use the 16 KB patterns + 47 outcome records as source data.
+4. After Tier 1 is closed, evaluate whether to push into Tier 2 (assembly classifier + function registry) or do a larger decompilation sprint on libgpu/libc.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
