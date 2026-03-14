@@ -696,6 +696,7 @@ g_DmaInterruptCallbacks = 0x8005896C;
 g_RandomSeed = 0x8005A1FC;
 
 // PSY-Q Libgpu
+g_GpuPkg = 0x800568C8;
 g_GpuPrintf = 0x800568CC;
 g_GraphDebugLevel = 0x800568D2;
 g_DrawSyncCallbackFn = 0x800568DC;

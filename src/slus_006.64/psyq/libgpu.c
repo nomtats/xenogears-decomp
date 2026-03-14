@@ -11,7 +11,7 @@ extern int (*g_GpuPrintf)(char*, ...);
 extern DRAWENV g_GpuDrawEnv;
 extern DISPENV g_GpuDispEnv;
 
-// D_800568C8 : Sys func ptrs
+extern GpuPackage *g_GpuPkg;
 
 DRAWENV* SetDefDrawEnv(DRAWENV* env, int x, int y, int w, int h) {
     int nVideoMode;
@@ -283,15 +283,18 @@ u_long DrawSyncCallback(void (*pCallbackFn)()) {
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", SetDispMask);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", DrawSync);
-/*
+extern char D_80019148; // "DrawSync(%d)...\n"
+/**
+ * @brief Wait for all drawing to finish, or check drawing status.
+ * @param mode 0 = block until complete, non-zero = return remaining count
+ * @return Number of positions remaining in the command buffer
+ */
 int DrawSync(int mode) {
     if (g_GraphDebugLevel >= 2)
-        g_GpuPrintf("DrawSync(%d)...\n", mode);
+        g_GpuPrintf(&D_80019148, mode);
 
-    return func_80046DB4(mode);
+    return g_GpuPkg->drawSync(mode);
 }
-*/
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", func_8004463C);
 
@@ -299,9 +302,29 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearImage);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearImage2);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", LoadImage);
+extern char D_8001918C; // "LoadImage"
+/**
+ * @brief Transfer a rectangular image area from main memory to VRAM.
+ * @param rect Destination rectangle on VRAM
+ * @param p Source pixel data in main memory
+ * @return Transfer status
+ */
+int LoadImage(RECT *rect, u_long *p) {
+    func_8004463C(&D_8001918C, rect);
+    return g_GpuPkg->transfer(g_GpuPkg->loadParam, rect, 8, p);
+}
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", StoreImage);
+extern char D_80019198; // "StoreImage"
+/**
+ * @brief Transfer a rectangular image area from VRAM to main memory.
+ * @param rect Source rectangle on VRAM
+ * @param p Destination buffer in main memory
+ * @return Transfer status
+ */
+int StoreImage(RECT *rect, u_long *p) {
+    func_8004463C(&D_80019198, rect);
+    return g_GpuPkg->transfer(g_GpuPkg->storeParam, rect, 8, p);
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", MoveImage);
 
@@ -309,9 +332,29 @@ INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearOTag);
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearOTagR);
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", DrawPrim);
+/**
+ * @brief Send a single GPU primitive directly, bypassing the ordering table.
+ * @param p Pointer to the primitive to draw
+ */
+void DrawPrim(void *p) {
+    int len;
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", DrawOTag);
+    len = ((u_char *)p)[3];
+    g_GpuPkg->drawSync(0);
+    g_GpuPkg->sendData((u_char *)p + 4, len);
+}
+
+extern char D_800191E0; // "DrawOTag(%08x)...\n"
+/**
+ * @brief Send an ordering table to the GPU for rendering.
+ * @param p Pointer to the ordering table to draw
+ */
+void DrawOTag(u_long *p) {
+    if (g_GraphDebugLevel >= 2)
+        g_GpuPrintf(&D_800191E0, p);
+
+    g_GpuPkg->transfer(g_GpuPkg->otagParam, p, 0, 0);
+}
 
 INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", PutDrawEnv);
 

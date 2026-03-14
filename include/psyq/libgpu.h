@@ -65,6 +65,31 @@
  */
 
 /*
+ * GPU Driver Package (vtable)
+ *
+ * Initialized by ResetGraph(). All GPU operations dispatch through
+ * this table, allowing different driver implementations to be swapped.
+ */
+typedef struct GpuPackage {
+    /* 0x00 */ u_long unk_00;
+    /* 0x04 */ u_long unk_04;
+    /* 0x08 */ int  (*transfer)();
+    /* 0x0C */ u_long clearParam;
+    /* 0x10 */ void (*command)();
+    /* 0x14 */ void (*sendData)();
+    /* 0x18 */ u_long otagParam;
+    /* 0x1C */ u_long storeParam;
+    /* 0x20 */ u_long loadParam;
+    /* 0x24 */ u_long unk_24;
+    /* 0x28 */ u_long unk_28;
+    /* 0x2C */ void (*clearOTagR)();
+    /* 0x30 */ u_long unk_30;
+    /* 0x34 */ int  (*reset)();
+    /* 0x38 */ u_long unk_38;
+    /* 0x3C */ int  (*drawSync)();
+} GpuPackage;
+
+/*
  *	Externals
  */
  extern int (*g_GpuPrintf)(char*, ...);

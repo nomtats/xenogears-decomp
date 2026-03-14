@@ -4,10 +4,12 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 
 ## 🟢 Current Status
 - **Phase 4 (Sustained Manual Decompilation)** is active. Executing the "Jigsaw Strategy" on heavily-referenced true leaf functions.
+- **5 GPU vtable dispatch functions matched in libgpu** (2026-03-14): `DrawSync` (13 callers), `LoadImage` (8 callers), `StoreImage`, `DrawOTag`, `DrawPrim` all decompiled using the `g_GpuPkg` vtable dispatch pattern (KB pattern_example_015). All matched on first or second attempt.
+- **GpuPackage struct defined, D_800568C8 renamed to g_GpuPkg** (2026-03-14): Defined `GpuPackage` struct in `include/psyq/libgpu.h` mapping all 16 vtable slots (6 function pointers, 5 DMA params, 5 unknown). K&R-style `()` function pointers eliminate cast noise. Global rename across 19 assembly files + C source. Full byte-match confirmed.
 - **libc is now 66.7% complete** (8/12): `memcpy`, `bzero`, `memchr`, `memset` all matched using the flat goto delay slot masking pattern. Remaining: 3 unknown functions + `Sprintf` (604 lines).
 - **libspu is 100% complete.** `libcd`, `libc2`, `controller`, `font`, `heap_debug`, `kernel_menu`, `memory` are also at 100%.
 - **BIOS tail-call wrappers classified as permanently unmatchable.** 17 functions across libapi/libapi_2/libapi_3/libcard are 3-instruction kernel trampolines that cannot be expressed in C (no `naked` attribute in GCC 2.7.2 MIPS). Added as anti-pattern to KB.
-- **GPU vtable dispatch functions identified as next high-value targets.** `DrawSync` (13 callers), `LoadImage` (8 callers), `StoreImage`, `DrawOTag`, `DrawPrim` all use a dispatch table at `D_800568C8` and have normal prologues/epilogues — should be matchable.
+- **Remaining libgpu INCLUDE_ASM stubs**: 18 functions still unmatched (ClearImage, ClearImage2, MoveImage, ClearOTag, ClearOTagR, PutDrawEnv, DrawOTagEnv, PutDispEnv, SetDispMask, ResetGraph, SetGraphDebug, SetGraphReverse, SetDrawMove, func_8004463C, func_8004440C, func_800444B8, func_80043EAC, func_80043F18). ClearImage/ClearImage2/MoveImage use the same vtable pattern and should be matchable next.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -66,3 +68,5 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | bzero Decompilation | Perfectly matched `bzero` using flat goto block manipulation to force branch polarity and delay slot variable masking for exact register alignment. | [2026-03-13_2023_bzero_decompilation.md](./2026-03-13_2023_bzero_decompilation.md) |
 | 2026-03-13 | memchr Decompilation | Perfectly matched `memchr` using a flat goto state-machine to reproduce precise jump polarity and force delay slot explicit allocation on initial loop entry. | [2026-03-13_2220_memchr_decompilation.md](./2026-03-13_2220_memchr_decompilation.md) |
 | 2026-03-14 | memset Match & BIOS Anti-Pattern | Matched `memset` on first attempt reusing bzero's flat goto template. Classified 17 BIOS tail-call wrappers as permanently unmatchable — added anti-pattern to KB. | [2026-03-14_1000_memset_and_bios_antipattern.md](./2026-03-14_1000_memset_and_bios_antipattern.md) |
+| 2026-03-14 | GPU Vtable Dispatch — 5 Matched | Decompiled DrawSync, LoadImage, StoreImage, DrawOTag, DrawPrim using the g_GpuPkg vtable dispatch pattern. All matched byte-for-byte. New KB pattern_example_015 added. | [2026-03-14_1400_gpu_vtable_dispatch.md](./2026-03-14_1400_gpu_vtable_dispatch.md) |
+| 2026-03-14 | GpuPackage Struct & Symbol Rename | Defined GpuPackage struct for the GPU driver vtable. Renamed D_800568C8 → g_GpuPkg across 19 asm files + C source. K&R function pointers eliminate casts. Full byte-match confirmed. | [2026-03-14_1600_gpu_package_struct.md](./2026-03-14_1600_gpu_package_struct.md) |

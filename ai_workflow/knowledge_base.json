@@ -256,6 +256,22 @@
         "pattern-reuse"
       ],
       "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_015",
+      "concept": "PsyQ GPU Vtable Dispatch Pattern (GpuPackage struct)",
+      "description": "Many PsyQ libgpu functions dispatch through `g_GpuPkg`, a `GpuPackage*` struct pointer (renamed from D_800568C8). The struct is defined in include/psyq/libgpu.h with a mix of function pointers (K&R style `()` for unspecified args) and u_long data members. Function pointers use K&R `()` so callers don't need casts — GCC 2.7.2 treats `()` as accepting any arguments. Key struct members: transfer (0x08) = DMA transfer function, clearParam (0x0C), command (0x10) = GP1 command sender, sendData (0x14) = primitive data sender, otagParam (0x18), storeParam (0x1C), loadParam (0x20), clearOTagR (0x2C), reset (0x34), drawSync (0x3C). Example: `g_GpuPkg->drawSync(mode)` replaces `((int (*)(int))D_800568C8[0xF])(mode)` with identical codegen. The struct approach produces byte-perfect matches because sizeof(function_ptr) == sizeof(u_long) == 4 on MIPS32, so struct layout is identical to the original u_long array.",
+      "tags": [
+        "optimization",
+        "vtable",
+        "indirect-call",
+        "libgpu",
+        "psyq",
+        "pattern-reuse",
+        "struct",
+        "readability"
+      ],
+      "date_added": "2026-03-14"
     }
   ]
 }
