@@ -24,6 +24,7 @@ It is a living document. When a milestone is completed, a new gap is identified,
 - **No pre-analysis classification.** Target selection relies on reference count and line count, but not structural signatures (spin loops, GTE routines, SN wrappers). Agents discover unmatchable functions only after wasting time on them.
 - **The feedback loop isn't closed.** Outcome data (attempts, iterations, failure modes, winning patterns) is buried in journal prose, not structured records. There's no way to statistically analyze what works.
 - **Skills directory is underutilized.** Only one skill exists (Docker setup). The core decompilation loop, symbol renaming, post-match reflection, and pattern classification are all manual, undocumented procedures.
+- **No readability checkpoint in the workflow.** The current loop is "match → document → next target" but doesn't pause to ask whether matched code is actually human-readable. Cryptic auto-generated symbols (`D_800568C8`) and raw pointer casts persist until a human intervenes. The GpuPackage struct refactor (2026-03-14) was triggered by a human design review, not by any automated workflow step — yet it was arguably higher-impact than matching additional functions.
 - **Journals don't scale.** 20 entries after one day. At this rate, the journal archive becomes unsearchable within a week. No topical index, no function-to-journal mapping.
 - **No workflow metrics.** We cannot prove the workflow is improving because we don't measure it.
 
@@ -52,7 +53,19 @@ It is a living document. When a milestone is completed, a new gap is identified,
     3. Append structured outcome record to `outcome_log.jsonl`.
     4. If a new technique was used, add it to `knowledge_base.json` with cross-references.
     5. Update `journals/TOC.md` status and next steps.
+    6. **Readability check:** Are there cryptic `D_`/`func_` symbols that now have enough context to rename? Can raw pointer arithmetic be replaced with a struct definition? Flag candidates for a readability pass.
   - Prevents the most commonly skipped steps (documentation, KB updates, reflection).
+
+- [ ] **Symbol Rename & Struct Recovery Skill** (`ai_workflow/skills/symbol_rename/SKILL.md`)
+  - Documented procedure for the global rename workflow:
+    1. Identify candidate symbol (e.g. `D_800568C8`) and determine its semantic meaning from surrounding code.
+    2. grep across all file categories (asm/, src/, include/, config/, linker/) to find all references.
+    3. Add human-readable name to `config/symbol_addrs.*.txt`.
+    4. Execute global search-and-replace across all assembly and data files.
+    5. Update C source declarations and usages.
+    6. For pointer-to-table symbols: recover struct layout by analyzing all offset accesses across callers, classify members as function pointers vs data, and define a typedef struct in the appropriate header.
+    7. Micro-build + `make check` to verify byte-match is preserved.
+  - **Key technique discovered:** K&R-style `()` function pointers (unspecified arguments) generate identical code to explicit casts on GCC 2.7.2 MIPS, while eliminating cast noise. Use for vtable structs where callers pass varying argument types.
 
 **Success Criteria:** A new agent session can pick its first target and identify the right decompilation approach within 5 minutes, using only the decision tree and KB — without reading any journals.
 
@@ -161,3 +174,4 @@ It is a living document. When a milestone is completed, a new gap is identified,
 | Date | Change | Rationale |
 | :--- | :--- | :--- |
 | 2026-03-13 | Initial creation | Formalized workflow evolution plan from comprehensive review of journals, KB, and meta-workflow gaps. Established 5-tier improvement roadmap with measurable success criteria. |
+| 2026-03-14 | Tier 1: Added readability pass + symbol rename skill | GpuPackage struct session revealed that readability refactoring is a distinct high-value workflow phase not captured in the post-match checklist. Added step 6 to reflection template, new Symbol Rename & Struct Recovery skill item, and identified the missing "readability checkpoint" gap in the maturity assessment. |
