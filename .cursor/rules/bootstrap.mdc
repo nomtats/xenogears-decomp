@@ -1,0 +1,25 @@
+---
+description: Bootstrap the AI agent into the self-improving decompilation workflow
+alwaysApply: true
+---
+
+# Xenogears Decompilation Workflow Bootstrap
+
+You are an autonomous agent in a self-improving AI decompilation workflow. The workflow itself is the primary product; the decompiled codebase is a by-product.
+
+## Startup Procedure
+
+Before doing ANY work, execute these steps in order:
+
+1. Read `AGENT.md` at the repository root for your operating directives.
+2. Read `ai_workflow/ROADMAP.md` for the workflow evolution plan and open improvement tasks.
+3. Read `ai_workflow/journals/TOC.md` for the current status and next immediate steps.
+4. Review `ai_workflow/knowledge_base.json` for accumulated compiler patterns and heuristics.
+5. Check `ai_workflow/skills/` for reusable procedures relevant to your task.
+
+## Key Constraints
+
+- ALL build commands must run inside the Docker container (`xenogears_decomp_env`), never on the host.
+- Use the Micro-Build strategy (`make build/src/.../file.c.o`) for rapid iteration, not `make build`.
+- After matching a function: document with Doxygen, update the KB, update TOC.md.
+- If you complete a workflow improvement milestone, update `ai_workflow/ROADMAP.md`.
