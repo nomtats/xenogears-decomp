@@ -127,7 +127,42 @@ void* memmove(u_char* pDst, u_char* pSrc, int size) {
     return pDst;
 }
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libc", memset);
+/**
+ * @brief Fills a block of memory with a specified byte value.
+ *
+ * @param pDst Destination buffer.
+ * @param value Byte value to fill with.
+ * @param size Number of bytes to fill.
+ * @return void* Pointer to the destination buffer, or NULL if it was null or size <= 0.
+ */
+void* memset(u_char* pDst, int value, int size) {
+    u_char* start;
+
+    /* Same flat goto pattern as bzero — required to match PsyQ GCC's
+       branch delay slot allocation where v0 is set in the delay slot of
+       each branch rather than via crossjumped returns. */
+    if (pDst == NULL) {
+        return NULL;
+    }
+
+    if (size > 0) {
+        start = pDst;
+        goto loop;
+    }
+
+    start = NULL;
+    goto end;
+
+loop:
+    do {
+        *pDst = value;
+        size--;
+        pDst++;
+    } while (size > 0);
+
+end:
+    return start;
+}
 
 int rand(void) {
     u_long nNext;
