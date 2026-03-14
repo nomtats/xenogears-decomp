@@ -199,6 +199,12 @@ objdiff-config: regenerate
 	@$(MAKE) NON_MATCHING=1 SKIP_ASM=1 expected
 	@$(PYTHON) $(OBJDIFF_DIR)/objdiff_generate.py $(OBJDIFF_DIR)/config.yaml
 
+# Build + diff a single function against its target assembly.
+# Usage:  make asmdiff FUNC=MoveImage [SRC=src/slus_006.64/psyq/libgpu.c]
+# SRC is optional; the tool infers the source file from the function name.
+asmdiff:
+	-@$(PYTHON) tools/asmdiff.py --build $(FUNC) $(SRC)
+
 report: objdiff-config
 	@$(OBJDIFF) report generate > $(BUILD_DIR)/progress.json
 

@@ -286,6 +286,21 @@
         "mismatch"
       ],
       "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_017",
+      "concept": "Inverted If-Body Pattern Produces bnez Without Goto",
+      "description": "When the target assembly uses `bnez` (forward branch over an error path to the main body), the natural C pattern `if (cond == 0) return -1;` produces `beqz` (wrong polarity). Previous approaches required flat goto state-machines to force `bnez`. However, wrapping the body in `if (cond) { body; return result; } return -1;` naturally produces `bnez` because GCC lays out the blocks as: (1) test cond, (2) error path inline (`j exit; li -1`), (3) body after. The `bnez` jumps OVER the error path to the body. This is much cleaner than goto and avoids convergence-induced register allocation conflicts. Combine with `register int dest asm(\"$2\")` to pin the return value register and route all intermediate values (width check, height check, packed result, rect data) through the same pinned variable, eliminating extra `move` instructions at merge points. Discovered during MoveImage decompilation (attempt 24 of 24): the `if (dest) { body; return dest; }` pattern produced byte-perfect branch structure (beqz for width, bnez for height, correct delay slots) with zero goto statements. Key insight: `if (x == 0) return err;` gives beqz (early exit), while `if (x) { work; return ok; } return err;` gives bnez (jump over error to body) — same logic, different block layout.",
+      "tags": [
+        "optimization",
+        "control-flow",
+        "bnez",
+        "goto-reduction",
+        "register-allocation",
+        "block-layout",
+        "gcc-2.7.2"
+      ],
+      "date_added": "2026-03-14"
     }
   ]
 }

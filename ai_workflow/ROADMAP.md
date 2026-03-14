@@ -172,8 +172,9 @@ It is a living document. When a milestone is completed, a new gap is identified,
   6. On match: executes the post-match reflection checklist automatically.
   7. On failure after N iterations: logs the attempt in the outcome log, marks the function as `attempted_failed`, and moves to the next target.
 
-- [ ] **Diff Interpretation Engine**
-  - Parses `objdiff` output programmatically to identify specific mismatch types (wrong register, wrong branch polarity, extra/missing instruction).
+- [ ] **Diff Interpretation Engine** *(foundation built: `tools/asmdiff.py`)*
+  - `asmdiff.py` provides structured, per-instruction diffs with relocation masking, match scoring, and color output. Run via `python3 tools/asmdiff.py <Func>` or `make asmdiff FUNC=<Func>`.
+  - Next step: extend `asmdiff.py` to classify mismatch types programmatically (wrong register, wrong branch polarity, instruction rotation, extra/missing instruction) and suggest KB patterns.
   - Maps mismatch types to KB patterns ("wrong branch polarity" → suggest goto manipulation).
 
 - [ ] **Session Planner**
@@ -193,3 +194,4 @@ It is a living document. When a milestone is completed, a new gap is identified,
 | 2026-03-14 | Expanded struct recovery skill + human-AI insight | Three iterative refinement passes on GpuPackage proved that readability benefits from human-AI dialogue. Expanded Symbol Rename skill with quality ladder (named → descriptive → typed → documented), typed-vs-polymorphic analysis step, and noted that autonomous readability passes may need human-in-the-loop for design taste. |
 | 2026-03-14 | Tier 1: Added mismatch diagnosis layer to Pattern Decision Tree | ClearImage2 session (5 iterations, 4 wasted) proved that the biggest time sink is post-attempt mismatch diagnosis, not pre-attempt classification. Added two-layer decision tree spec (pre-attempt + mismatch diagnosis) with concrete symptom→fix examples. Added "no mismatch-to-fix mapping" to the gaps assessment. Updated KB pattern count to 16. |
 | 2026-03-14 | Tier 1: Completed Post-Match Reflection + Outcome Records | Created post_match_reflection skill (6-step success path, 3-step failure path, batch shortcut). Created outcome_log.jsonl with ~45 retroactive entries from all journals. Updated AGENT.md to point to skill (replaces old steps 4–6). 3 of 4 Tier 1 items now complete. |
+| 2026-03-14 | Tier 5: Built asmdiff.py — foundation for Diff Interpretation Engine | Created `tools/asmdiff.py`: CLI tool for per-instruction diff between target .s and compiled dump. Auto-discovers files by function name, handles MIPS relocations (masks address fields for I-type/J-type), color-coded output with match scoring. Added `make asmdiff FUNC=X` Makefile target. Updated AGENT.md Micro-Build loop to reference asmdiff as the primary diff workflow. |
