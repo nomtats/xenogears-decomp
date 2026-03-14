@@ -45,24 +45,30 @@ CYAN = "\033[36m"
 
 
 def find_target_asm(func_name: str) -> Path | None:
-    """Walk asm/**/matchings/ to find <func_name>.s"""
+    """Walk asm/**/nonmatchings/ or asm/**/matchings/ to find <func_name>.s"""
     asm_root = Path("asm")
     for p in asm_root.rglob(f"{func_name}.s"):
-        if "matchings" in p.parts:
+        if "matchings" in p.parts or "nonmatchings" in p.parts:
             return p
     return None
 
 
 def infer_dump_path(target_path: Path) -> Path | None:
     """Derive build/.../foo.c.dump.s from asm/.../matchings/.../FuncName.s
-
-    The matchings directory structure: asm/<target>/matchings/<lib>/<module>/<Func>.s
-    maps to source:                    src/<target>/<lib>/<module>.c
+    
+    The directory structure: asm/<target>/nonmatchings/<lib>/<module>/<Func>.s
+    maps to source:          src/<target>/<lib>/<module>.c
     """
     parts = list(target_path.parts)
-    try:
-        match_idx = parts.index("matchings")
-    except ValueError:
+    
+    # Find the index of either 'matchings' or 'nonmatchings'
+    match_idx = -1
+    for i, part in enumerate(parts):
+        if part in ("matchings", "nonmatchings"):
+            match_idx = i
+            break
+            
+    if match_idx == -1:
         return None
 
     target_name = "/".join(parts[1:match_idx])

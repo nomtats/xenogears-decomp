@@ -414,9 +414,49 @@ int MoveImage(RECT *rect, int x, int y) {
     return -1;
 }
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearOTag);
+extern char D_800191B0[]; // "ClearOTag(%08x,%d)...\\n"
+extern char D_800191C8[]; // "ClearOTagR(%08x,%d)...\\n"
+extern u_long D_8005698C;
 
-INCLUDE_ASM("asm/slus_006.64/nonmatchings/psyq/libgpu", ClearOTagR);
+// @brief Initialize an ordering table to an empty state.
+// @param ot Pointer to the ordering table to initialize
+// @param n Number of items in the table
+// @return Pointer to the ordering table
+u_long *ClearOTag(u_long *ot, int n) {
+    if (g_GraphDebugLevel >= 2) {
+        g_GpuPrintf(D_800191B0, ot, n);
+    }
+    
+    n--;
+    if (n != 0) {
+        do {
+            n--;
+            setlen(ot, 0);
+            setaddr(ot, ot + 1);
+            ot++;
+        } while (n != 0);
+    }
+    
+    *ot = (u_long)&D_8005698C & 0x00FFFFFF;
+    
+    return ot;
+}
+
+// @brief Hardware-accelerated reverse ordering table initialization via DMA.
+// @param ot Pointer to the ordering table
+// @param n Number of entries in the table
+// @return Pointer to the ordering table
+u_long *ClearOTagR(u_long *ot, int n) {
+    if (g_GraphDebugLevel >= 2) {
+        g_GpuPrintf(D_800191C8, ot, n);
+    }
+    
+    g_GpuPkg->clearOTagR(ot, n);
+    
+    *ot = (u_long)&D_8005698C & 0x00FFFFFF;
+    
+    return ot;
+}
 
 /**
  * @brief Send a single GPU primitive directly, bypassing the ordering table.
