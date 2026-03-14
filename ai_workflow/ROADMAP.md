@@ -57,7 +57,7 @@ It is a living document. When a milestone is completed, a new gap is identified,
     6. **Readability check:** Are there cryptic `D_`/`func_` symbols that now have enough context to rename? Can raw pointer arithmetic be replaced with a struct definition? Flag candidates for a readability pass.
   - Prevents the most commonly skipped steps (documentation, KB updates, reflection).
 
-- [ ] **Symbol Rename & Struct Recovery Skill** (`ai_workflow/skills/symbol_rename/SKILL.md`)
+- [x] **Symbol Rename & Struct Recovery Skill** (`ai_workflow/skills/symbol_rename/SKILL.md`)
   - Documented procedure for the global rename workflow:
     1. Identify candidate symbol (e.g. `D_800568C8`) and determine its semantic meaning from surrounding code.
     2. grep across all file categories (asm/, src/, include/, config/, linker/) to find all references.
