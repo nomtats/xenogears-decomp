@@ -228,6 +228,34 @@
         "mismatch"
       ],
       "date_added": "2026-03-13"
+    },
+    {
+      "id": "antipattern_001",
+      "concept": "PS1 BIOS Tail-Call Wrappers Are Permanently INCLUDE_ASM",
+      "description": "Many PsyQ SDK functions (libapi, libapi_2, libapi_3, libcard) are 3-instruction BIOS dispatch trampolines: `addiu $t2, $zero, 0xB0; jr $t2; addiu $t1, $zero, <func_num>`. These jump to the PS1 kernel's A0/B0/C0 dispatch tables and never return to the wrapper — the BIOS function returns directly to the original caller. Because GCC always emits a `jr $ra; nop` epilogue on any C function (even with `__asm__ volatile`), these 3-instruction (12-byte) functions cannot be expressed in C — GCC would produce 5 instructions (20 bytes). There is no `__attribute__((naked))` in GCC 2.7.2 for MIPS. Similarly, `setjmp`/`longjmp` directly manipulate callee-saved registers and `$ra`, making them fundamentally inexpressible in C. These were hand-written assembly in the original PsyQ SDK and must remain as `INCLUDE_ASM` permanently. Do NOT waste time attempting to decompile them. Known affected functions: StartPAD2, InitPAD2, StopPAD2, SysEnqIntRP, SysDeqIntRP, HookEntryInt, ResetEntryInt, ReturnFromException, ChangeClearRCnt, StartCARD2, InitCARD2, StopCARD2, _card_info, func_80040ABC, func_8004BED8, setjmp, longjmp.",
+      "tags": [
+        "anti-pattern",
+        "unmatchable",
+        "bios",
+        "psyq",
+        "libapi",
+        "libcard",
+        "INCLUDE_ASM"
+      ],
+      "date_added": "2026-03-14"
+    },
+    {
+      "id": "pattern_example_014",
+      "concept": "Flat Goto Pattern Reuse Across libc Functions",
+      "description": "The flat goto + delay slot masking pattern (pattern_example_013) is not unique to a single function — it is a systematic compiler idiom used across the entire PsyQ libc. Functions `bzero`, `memset`, and `memchr` all use the identical structure: (1) NULL-check early return, (2) `if (size > 0) { start = pDst; goto loop; }`, (3) `start = NULL; goto end;`, (4) do-while loop, (5) single `return start;` at the `end:` label. When encountering a new libc-style function with multiple return paths and delay-slot-seated v0 assignments, try this template first — it matched on the first attempt for `memset` because the pattern was already proven on `bzero`.",
+      "tags": [
+        "optimization",
+        "delay-slots",
+        "goto",
+        "libc",
+        "pattern-reuse"
+      ],
+      "date_added": "2026-03-14"
     }
   ]
 }

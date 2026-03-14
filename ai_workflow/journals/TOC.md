@@ -3,13 +3,11 @@
 This document tracks the ongoing activities, decisions, and progress of the AI-assisted decompilation workflow. It serves as the primary entry point for any new agent session to quickly understand recent context without needing to parse individual files.
 
 ## 🟢 Current Status
-- **Phase 4 (Sustained Manual Decompilation)** is active. We are executing the "Jigsaw Strategy," starting by decompiling highly-referenced "True Leaf" nodes (functions with 0 callees).
-- We have successfully cleared our first edge targets: `SetTransMatrix`, `SetRotMatrix`, and `PCclose` by matching inline Coprocessor 2 and Exception assembly.
-- Added a new **Micro-Build Workflow Strategy**: By running `make build/src/.../file.o` iteratively instead of standard `make build`, we compile object loops in milliseconds without linker issues.
-- Using the new strategy, we successfully perfectly matched `memcpy` in `libc.c` utilizing a branch delay-slot shifting trick.
-- Using a combination of flat goto block manipulation and delay slot variable masking, we successfully perfectly matched the highly-referenced `bzero` leaf function in `libc.c`.
-- Using a flat goto state-machine mapping to reproduce precise jump polarity and delay slot seating, we achieved a perfect 100% byte match for `memchr` in `libc.c`.
-- Our immediate next steps are to continue solving the top heavily-referenced leaf targets from `ai_workflow/analysis/call_graph_report.md` (e.g. `memset`, `NormalClip`, `func_8008CF3C`) to progressively shrink the "unknown" footprint underlying all major systems.
+- **Phase 4 (Sustained Manual Decompilation)** is active. Executing the "Jigsaw Strategy" on heavily-referenced true leaf functions.
+- **libc is now 66.7% complete** (8/12): `memcpy`, `bzero`, `memchr`, `memset` all matched using the flat goto delay slot masking pattern. Remaining: 3 unknown functions + `Sprintf` (604 lines).
+- **libspu is 100% complete.** `libcd`, `libc2`, `controller`, `font`, `heap_debug`, `kernel_menu`, `memory` are also at 100%.
+- **BIOS tail-call wrappers classified as permanently unmatchable.** 17 functions across libapi/libapi_2/libapi_3/libcard are 3-instruction kernel trampolines that cannot be expressed in C (no `naked` attribute in GCC 2.7.2 MIPS). Added as anti-pattern to KB.
+- **GPU vtable dispatch functions identified as next high-value targets.** `DrawSync` (13 callers), `LoadImage` (8 callers), `StoreImage`, `DrawOTag`, `DrawPrim` all use a dispatch table at `D_800568C8` and have normal prologues/epilogues — should be matchable.
 
 ## 📋 Project Roadmap & Next Steps
 ### Phase 1: Environment Setup (Completed)
@@ -34,7 +32,7 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
   - **`libspu`**: 100% complete! (Confirmed that the last unmatched symbol `D_8001946C` was just a data label falsely counted by the call graph script).
   - **`libsn`**: 12.5% complete (7 unmatched, very similar SN systems I/O routines like `PClseek`, `PCopen`, 5-55 ASM lines).
   - **`libcard`**: 14.3% complete (6 unmatched, tiny functions 6-23 ASM lines).
-  - **`libc`**: 58.3% complete (5 unmatched standard library routines vs 7 matched, including `memcpy`, `memset`, `memchr`, and `bzero`).
+  - **`libc`**: 66.7% complete (4 unmatched standard library routines vs 8 matched, including `memcpy`, `memset`, `memchr`, and `bzero`).
   - **`system/libarchive`**: 77.8% complete (6 unmatched, larger functions up to 352 ASM lines, but near completion).
 - [ ] Continue mapping out and decompiling remaining critical sub-systems requiring manual intervention.
 
@@ -67,3 +65,4 @@ This document tracks the ongoing activities, decisions, and progress of the AI-a
 | 2026-03-13 | libspu 100% Complete via Call Graph Script Fix | Achieved 100% decompilation for `libspu` by realizing `D_8001946C.s` was merely a data label, and updating `generate_call_graph.py` to ignore data and jump table labels correctly. | [2026-03-13_1730_libspu_100_percent.md](./2026-03-13_1730_libspu_100_percent.md) |
 | 2026-03-13 | bzero Decompilation | Perfectly matched `bzero` using flat goto block manipulation to force branch polarity and delay slot variable masking for exact register alignment. | [2026-03-13_2023_bzero_decompilation.md](./2026-03-13_2023_bzero_decompilation.md) |
 | 2026-03-13 | memchr Decompilation | Perfectly matched `memchr` using a flat goto state-machine to reproduce precise jump polarity and force delay slot explicit allocation on initial loop entry. | [2026-03-13_2220_memchr_decompilation.md](./2026-03-13_2220_memchr_decompilation.md) |
+| 2026-03-14 | memset Match & BIOS Anti-Pattern | Matched `memset` on first attempt reusing bzero's flat goto template. Classified 17 BIOS tail-call wrappers as permanently unmatchable — added anti-pattern to KB. | [2026-03-14_1000_memset_and_bios_antipattern.md](./2026-03-14_1000_memset_and_bios_antipattern.md) |
